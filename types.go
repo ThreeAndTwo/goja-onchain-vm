@@ -49,7 +49,6 @@ type VmFunc string
 
 const (
 	NEWPROVIDER     VmFunc = "newProvider"
-	LOGTX           VmFunc = "logTx"
 	GETBALANCE      VmFunc = "getBalance"
 	GETTOKENBALANCE VmFunc = "getTokenBalance"
 	CALL            VmFunc = "call"

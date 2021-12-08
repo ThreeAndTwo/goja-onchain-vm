@@ -3,15 +3,19 @@ package goja_onchain_vm
 import (
 	"fmt"
 	"github.com/dop251/goja"
+	"github.com/dop251/goja_nodejs/require"
 	"math/big"
 )
 
 func (gvm *VMGlobal) init() error {
+	registry := require.NewRegistry()
 	if !gvm.check() {
 		return fmt.Errorf("gvm config error, please check your config")
 	}
 
 	vm := gvm.runtime
+	registry.Enable(vm)
+	vm.SetFieldNameMapper(goja.TagFieldNameMapper("json", true))
 	err := vm.Set(string(NEWPROVIDER), gvm.NewProvider)
 	if err != nil {
 		return err
@@ -32,12 +36,7 @@ func (gvm *VMGlobal) init() error {
 		return err
 	}
 
-	err = vm.Set(string(STRING2BIGINT), gvm.String2BigInt)
-	if err != nil {
-		return err
-	}
-
-	return vm.Set(string(LOGTX), gvm.Log)
+	return vm.Set(string(STRING2BIGINT), gvm.String2BigInt)
 }
 
 func (gvm *VMGlobal) check() bool {
@@ -108,8 +107,4 @@ func (gvm *VMGlobal) Call(to, data string) goja.Value {
 
 func (gvm *VMGlobal) String2BigInt(number string) goja.Value {
 	return gvm.runtime.ToValue(String2BigInt(number))
-}
-
-func (gvm *VMGlobal) Log(args ...interface{}) {
-	fmt.Println(args...)
 }

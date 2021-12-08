@@ -2,6 +2,8 @@ package goja_onchain_vm
 
 import (
 	"github.com/dop251/goja"
+	_ "github.com/dop251/goja_nodejs/console"
+	_ "github.com/dop251/goja_nodejs/require"
 	"testing"
 )
 
@@ -24,8 +26,10 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				logTx('provider: ', provider)`,
+			script: `
+				var console = require('console')
+				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
+				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -38,8 +42,10 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				logTx('provider: ', provider)`,
+			script: `
+				var console = require('console')
+				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
+				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -48,8 +54,10 @@ func TestEVMChain_GetProvider(t *testing.T) {
 				runtime:   vm,
 				chainInfo: ChainInfo{},
 			},
-			script: `var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				logTx('provider: ', provider)`,
+			script: `
+				var console = require('console')
+				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
+				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -62,8 +70,10 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				logTx('provider: ', provider)`,
+			script: `
+				var console = require('console')
+				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
+				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -76,8 +86,10 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				logTx('provider: ', provider)`,
+			script: `
+				var console = require('console')
+				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
+				console.log('provider: ', provider)`,
 			want: true,
 		},
 	}
@@ -121,8 +133,10 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `var amount = getBalance('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				logTx('amount: ', amount)`,
+			script: `
+				var console = require('console')
+				var amount = getBalance('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -167,8 +181,10 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `var amount = getBalance('')
-				logTx('amount: ', amount)`,
+			script: `
+				var console = require('console')
+				var amount = getBalance('')
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -181,8 +197,10 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `var amount = getBalance('0xa8C731e9259CE796B417A02aE7cd0Cdcda0')
-				logTx('amount: ', amount)`,
+			script: `
+				var console = require('console')
+				var amount = getBalance('0xa8C731e9259CE796B417A02aE7cd0Cdcda0')
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 	}
@@ -227,9 +245,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -243,9 +262,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -255,9 +275,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				chainInfo: ChainInfo{},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -271,9 +292,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -287,9 +309,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -303,9 +326,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcd057a0', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -319,9 +343,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'','0xa8C731e9259CE796B417A02aE7cd0Cdcd057a0', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -335,9 +360,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d8','0xa8C731e9259CE796B417A02aE7cd0Cdcd057a0', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -351,9 +377,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(1,'0x39bb259f66e1c59d5abef88375979b4d20d98022','0x7be8076f4ea4a4ad08075c2508e481d6c946d12b', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -367,9 +394,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(0,'0x39bb259f66e1c59d5abef88375979b4d20d98022','0x7be8076f4ea4a4ad08075c2508e481d6c946d12b', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 		{
@@ -383,9 +411,10 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var tokenId = string2BigInt('0')
 				var amount = getTokenBalance(10,'0x39bb259f66e1c59d5abef88375979b4d20d98022','0x7be8076f4ea4a4ad08075c2508e481d6c946d12b', tokenId)
-				logTx('amount: ', amount)`,
+				console.log('amount: ', amount)`,
 			want: true,
 		},
 	}
@@ -430,8 +459,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8da5cb5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -445,8 +475,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea','0x8da5cb5b')
-				logTx('res: ', res)`,
+				console.log('res: ', res)`,
 			want: true,
 		},
 		{
@@ -456,8 +487,9 @@ func TestEVMChain_Call(t *testing.T) {
 				chainInfo: ChainInfo{},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8da5cb5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -471,8 +503,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8da5cb5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -486,8 +519,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('', '0x8da5cb5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -501,8 +535,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4Dc610ea', '0x8da5cb5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -516,8 +551,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0x8da5cb5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -531,8 +567,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3396c610ea', '0x8da5cb5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -546,8 +583,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 		{
@@ -561,8 +599,9 @@ func TestEVMChain_Call(t *testing.T) {
 				},
 			},
 			script: `
+				var console = require('console')
 				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8dab5b')
-				logTx('res ', res)`,
+				console.log('res ', res)`,
 			want: true,
 		},
 	}
