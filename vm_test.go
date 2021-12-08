@@ -10,11 +10,17 @@ import (
 var vm = goja.New()
 
 func TestEVMChain_GetProvider(t *testing.T) {
-	tests := []struct{
-		name   string
-		gvm    *VMGlobal
-		script string
-		want   bool
+	const script = `
+				var console = require('console')
+				function provider(){
+					return newProvider();
+				}
+				`
+
+	tests := []struct {
+		name string
+		gvm  *VMGlobal
+		want bool
 	}{
 		{
 			name: "normal",
@@ -26,10 +32,6 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -42,10 +44,6 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -54,10 +52,6 @@ func TestEVMChain_GetProvider(t *testing.T) {
 				runtime:   vm,
 				chainInfo: ChainInfo{},
 			},
-			script: `
-				var console = require('console')
-				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -70,10 +64,6 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				console.log('provider: ', provider)`,
 			want: true,
 		},
 		{
@@ -86,10 +76,6 @@ func TestEVMChain_GetProvider(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var provider = newProvider('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				console.log('provider: ', provider)`,
 			want: true,
 		},
 	}
@@ -102,7 +88,7 @@ func TestEVMChain_GetProvider(t *testing.T) {
 				return
 			}
 
-			rs, err := vm.RunString(tt.script)
+			_, err = vm.RunString(script)
 			if err != nil {
 				if _, ok := err.(*goja.InterruptedError); ok {
 					t.Logf(`InterruptedError: %s`, err)
@@ -111,17 +97,37 @@ func TestEVMChain_GetProvider(t *testing.T) {
 				}
 				return
 			}
-			t.Log("rs: ", rs)
+
+			provider, ok := goja.AssertFunction(vm.Get("provider"))
+			if !ok {
+				t.Errorf("provider not a function")
+				return
+			}
+
+			value, err := provider(goja.Undefined())
+			if (err != nil) == true {
+				t.Logf("new provider error %s", err)
+				return
+			}
+
+			t.Log("value: ", value)
 		})
 	}
 }
 
 func TestEVMChain_GetBalance(t *testing.T) {
+	const script = `
+					var console = require('console')
+					function balance(address) {
+						return getBalance(address)
+					}
+				`
+
 	tests := []struct {
-		name   string
-		gvm    *VMGlobal
-		script string
-		want   bool
+		name    string
+		gvm     *VMGlobal
+		account string
+		want    bool
 	}{
 		{
 			name: "normal",
@@ -133,11 +139,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var amount = getBalance('0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0')
-				console.log('amount: ', amount)`,
-			want: true,
+			account: "0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+			want:    true,
 		},
 		{
 			name: "vm is null",
@@ -149,7 +152,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			want: true,
+			account: "0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+			want:    true,
 		},
 		{
 			name: "chain not exist",
@@ -157,7 +161,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				runtime:   vm,
 				chainInfo: ChainInfo{},
 			},
-			want: true,
+			account: "0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+			want:    true,
 		},
 		{
 			name: "chainId unSupport",
@@ -169,7 +174,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			want: true,
+			account: "0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+			want:    true,
 		},
 		{
 			name: "account is null",
@@ -181,11 +187,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var amount = getBalance('')
-				console.log('amount: ', amount)`,
-			want: true,
+			account: "",
+			want:    true,
 		},
 		{
 			name: "inValidate account",
@@ -197,11 +200,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var amount = getBalance('0xa8C731e9259CE796B417A02aE7cd0Cdcda0')
-				console.log('amount: ', amount)`,
-			want: true,
+			account: "0xa8C731e9259CE796B417A02ad0Cdcdd2057a0",
+			want:    true,
 		},
 	}
 
@@ -213,7 +213,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				return
 			}
 
-			rs, err := vm.RunString(tt.script)
+			_, err = vm.RunString(script)
 			if err != nil {
 				if _, ok := err.(*goja.InterruptedError); ok {
 					t.Logf(`InterruptedError: %s`, err)
@@ -222,17 +222,43 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				}
 				return
 			}
-			t.Log("rs: ", rs)
+
+			balance, ok := goja.AssertFunction(vm.Get("balance"))
+			if !ok {
+				t.Errorf("balance not a function")
+				return
+			}
+
+			value, err := balance(goja.Undefined(), vm.ToValue(tt.account))
+			if err != nil {
+				t.Logf("new balance error %s", err)
+				return
+			}
+			t.Log("value: ", value)
 		})
 	}
 }
 
 func TestEVMChain_GetTokenBalance(t *testing.T) {
+	const script = `
+				function tokenBalance(tokenType, contractAddr, account, tokenId) {
+					var tokenId = string2BigInt(tokenId)
+					return getTokenBalance(tokenType, contractAddr, account, tokenId)
+				}
+				`
+
+	type params struct {
+		tokenType    int
+		contractAddr string
+		account      string
+		tokenId      string
+	}
+
 	tests := []struct {
-		name   string
-		gvm    *VMGlobal
-		script string
-		want   bool
+		name  string
+		gvm   *VMGlobal
+		filed params
+		want  bool
 	}{
 		{
 			name: "normal",
@@ -244,11 +270,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -261,11 +288,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -274,11 +302,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				runtime:   vm,
 				chainInfo: ChainInfo{},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -291,11 +320,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -308,11 +338,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -325,11 +356,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d831ec7','0xa8C731e9259CE796B417A02aE7cd0Cdcd057a0', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -342,11 +374,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'','0xa8C731e9259CE796B417A02aE7cd0Cdcd057a0', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -359,11 +392,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0xdac17f958d2ee523a2206206994597c13d8','0xa8C731e9259CE796B417A02aE7cd0Cdcd057a0', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f93a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"",
+			},
 			want: true,
 		},
 		{
@@ -376,11 +410,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(1,'0x39bb259f66e1c59d5abef88375979b4d20d98022','0x7be8076f4ea4a4ad08075c2508e481d6c946d12b', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				1,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -393,11 +428,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(0,'0x39bb259f66e1c59d5abef88375979b4d20d98022','0x7be8076f4ea4a4ad08075c2508e481d6c946d12b', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				0,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 		{
@@ -410,11 +446,12 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var tokenId = string2BigInt('0')
-				var amount = getTokenBalance(10,'0x39bb259f66e1c59d5abef88375979b4d20d98022','0x7be8076f4ea4a4ad08075c2508e481d6c946d12b', tokenId)
-				console.log('amount: ', amount)`,
+			filed: params{
+				10,
+				"0xdac17f958d2ee523a2206206994597c13d831ec7",
+				"0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
+				"0",
+			},
 			want: true,
 		},
 	}
@@ -427,7 +464,7 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				return
 			}
 
-			rs, err := vm.RunString(tt.script)
+			_, err = vm.RunString(script)
 			if err != nil {
 				if _, ok := err.(*goja.InterruptedError); ok {
 					t.Logf(`InterruptedError: %s`, err)
@@ -436,16 +473,40 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 				}
 				return
 			}
-			t.Log("rs: ", rs)
+
+			tokenBalance, ok := goja.AssertFunction(vm.Get("tokenBalance"))
+			if !ok {
+				t.Errorf("tokenBalance not a function")
+				return
+			}
+
+			value, err := tokenBalance(goja.Undefined(), vm.ToValue(tt.filed.tokenType), vm.ToValue(tt.filed.contractAddr),
+				vm.ToValue(tt.filed.account), vm.ToValue(tt.filed.tokenId))
+			if err != nil {
+				t.Logf("get token balance error %s", err)
+				return
+			}
+			t.Log("value: ", value)
 		})
 	}
 }
 
 func TestEVMChain_Call(t *testing.T) {
+	const script = `
+					function callChain(contractAddr, data) {
+						return call(contractAddr, data)
+					}
+				`
+
+	type params struct {
+		contract string
+		data     string
+	}
+
 	tests := []struct {
 		name   string
 		gvm    *VMGlobal
-		script string
+		field params
 		want   bool
 	}{
 		{
@@ -458,10 +519,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8da5cb5b')
-				console.log('res ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -474,10 +532,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea','0x8da5cb5b')
-				console.log('res: ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -486,10 +541,7 @@ func TestEVMChain_Call(t *testing.T) {
 				runtime:   vm,
 				chainInfo: ChainInfo{},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8da5cb5b')
-				console.log('res ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -502,10 +554,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8da5cb5b')
-				console.log('res ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -518,10 +567,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('', '0x8da5cb5b')
-				console.log('res ', res)`,
+			field: params{"", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -534,10 +580,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4Dc610ea', '0x8da5cb5b')
-				console.log('res ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4Dc610ea", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -550,10 +593,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0x8da5cb5b')
-				console.log('res ', res)`,
+			field: params{"", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -566,10 +606,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3396c610ea', '0x8da5cb5b')
-				console.log('res ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3396c610ea", "0x8da5cb5b"},
 			want: true,
 		},
 		{
@@ -582,10 +619,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '')
-				console.log('res ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", ""},
 			want: true,
 		},
 		{
@@ -598,10 +632,7 @@ func TestEVMChain_Call(t *testing.T) {
 					"",
 				},
 			},
-			script: `
-				var console = require('console')
-				var res = call('0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea', '0x8dab5b')
-				console.log('res ', res)`,
+			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", "0x8dab5b"},
 			want: true,
 		},
 	}
@@ -614,7 +645,7 @@ func TestEVMChain_Call(t *testing.T) {
 				return
 			}
 
-			rs, err := vm.RunString(tt.script)
+			_, err = vm.RunString(script)
 			if err != nil {
 				if _, ok := err.(*goja.InterruptedError); ok {
 					t.Logf(`InterruptedError: %s`, err)
@@ -623,7 +654,19 @@ func TestEVMChain_Call(t *testing.T) {
 				}
 				return
 			}
-			t.Log("rs: ", rs)
+
+			call, ok := goja.AssertFunction(vm.Get("callChain"))
+			if !ok {
+				t.Errorf("callChain not a function")
+				return
+			}
+
+			value, err := call(goja.Undefined(), vm.ToValue(tt.field.contract), vm.ToValue(tt.field.data))
+			if err != nil {
+				t.Logf("call error %s", err)
+				return
+			}
+			t.Log("value: ", value)
 		})
 	}
 }
