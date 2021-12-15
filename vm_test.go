@@ -25,8 +25,8 @@ func TestEVMChain_GetProvider(t *testing.T) {
 		{
 			name: "normal",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -37,8 +37,8 @@ func TestEVMChain_GetProvider(t *testing.T) {
 		{
 			name: "vm is null",
 			gvm: &VMGlobal{
-				runtime: nil,
-				chainInfo: ChainInfo{
+				Runtime: nil,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -49,16 +49,16 @@ func TestEVMChain_GetProvider(t *testing.T) {
 		{
 			name: "chain not exist",
 			gvm: &VMGlobal{
-				runtime:   vm,
-				chainInfo: ChainInfo{},
+				Runtime:   vm,
+				ChainInfo: ChainInfo{},
 			},
 			want: true,
 		},
 		{
 			name: "chainId unSupport",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					-1,
 					"",
 					"",
@@ -69,8 +69,8 @@ func TestEVMChain_GetProvider(t *testing.T) {
 		{
 			name: "rpc node is inValidate",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e7be5",
 					"",
@@ -132,8 +132,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 		{
 			name: "normal",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -145,8 +145,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 		{
 			name: "vm is null",
 			gvm: &VMGlobal{
-				runtime: nil,
-				chainInfo: ChainInfo{
+				Runtime: nil,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -158,8 +158,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 		{
 			name: "chain not exist",
 			gvm: &VMGlobal{
-				runtime:   vm,
-				chainInfo: ChainInfo{},
+				Runtime:   vm,
+				ChainInfo: ChainInfo{},
 			},
 			account: "0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0",
 			want:    true,
@@ -167,8 +167,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 		{
 			name: "chainId unSupport",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					-1,
 					"",
 					"",
@@ -180,8 +180,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 		{
 			name: "account is null",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -193,8 +193,8 @@ func TestEVMChain_GetBalance(t *testing.T) {
 		{
 			name: "inValidate account",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -263,8 +263,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "normal",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -281,8 +281,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "vm is null",
 			gvm: &VMGlobal{
-				runtime: nil,
-				chainInfo: ChainInfo{
+				Runtime: nil,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -299,8 +299,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "chain not exist",
 			gvm: &VMGlobal{
-				runtime:   vm,
-				chainInfo: ChainInfo{},
+				Runtime:   vm,
+				ChainInfo: ChainInfo{},
 			},
 			filed: params{
 				1,
@@ -313,8 +313,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "chainId unSupport",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					-1,
 					"",
 					"",
@@ -331,8 +331,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "account is null",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -349,8 +349,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "inValidate account",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -367,8 +367,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "contract address is null",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -385,8 +385,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "contract address is invalidation",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -403,8 +403,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "normal wax",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -421,8 +421,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "token type unSupport",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -439,8 +439,8 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 		{
 			name: "token type unSupport",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -512,8 +512,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "call normal",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -525,8 +525,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "vm is null",
 			gvm: &VMGlobal{
-				runtime: nil,
-				chainInfo: ChainInfo{
+				Runtime: nil,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -538,8 +538,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "chain not exist",
 			gvm: &VMGlobal{
-				runtime:   vm,
-				chainInfo: ChainInfo{},
+				Runtime:   vm,
+				ChainInfo: ChainInfo{},
 			},
 			field: params{"0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", "0x8da5cb5b"},
 			want: true,
@@ -547,8 +547,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "chainId unSupport",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					-1,
 					"",
 					"",
@@ -560,8 +560,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "contract address is null",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -573,8 +573,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "inValidate account",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -586,8 +586,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "contract address is null",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -599,8 +599,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "contract address is invalidation",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -612,8 +612,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "data is null",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",
@@ -625,8 +625,8 @@ func TestEVMChain_Call(t *testing.T) {
 		{
 			name: "data is invalidation",
 			gvm: &VMGlobal{
-				runtime: vm,
-				chainInfo: ChainInfo{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
 					1,
 					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
 					"",

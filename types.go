@@ -6,8 +6,8 @@ import (
 )
 
 type VMGlobal struct {
-	runtime   *goja.Runtime
-	chainInfo ChainInfo
+	Runtime   *goja.Runtime
+	ChainInfo ChainInfo
 }
 
 type ChainInfo struct {

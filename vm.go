@@ -13,7 +13,7 @@ func (gvm *VMGlobal) init() error {
 		return fmt.Errorf("gvm config error, please check your config")
 	}
 
-	vm := gvm.runtime
+	vm := gvm.Runtime
 	registry.Enable(vm)
 	vm.SetFieldNameMapper(goja.TagFieldNameMapper("json", true))
 	err := vm.Set(string(NEWPROVIDER), gvm.NewProvider)
@@ -40,71 +40,71 @@ func (gvm *VMGlobal) init() error {
 }
 
 func (gvm *VMGlobal) check() bool {
-	return nil != gvm && nil != gvm.runtime
+	return nil != gvm && nil != gvm.Runtime
 }
 
 func (gvm *VMGlobal) NewProvider() goja.Value {
-	chain, err := ChainGetter(&gvm.chainInfo)
+	chain, err := ChainGetter(&gvm.ChainInfo)
 	if err != nil {
-		gvm.runtime.Interrupt(`new chain error:` + err.Error())
-		return gvm.runtime.ToValue(`should be catch exception`)
+		gvm.Runtime.Interrupt(`new chain error:` + err.Error())
+		return gvm.Runtime.ToValue(`should be catch exception`)
 	}
 
 	provider, err := chain.GetProvider()
 	if err != nil {
-		gvm.runtime.Interrupt(`get chain provider error:` + err.Error())
-		return gvm.runtime.ToValue(`should be catch exception`)
+		gvm.Runtime.Interrupt(`get chain provider error:` + err.Error())
+		return gvm.Runtime.ToValue(`should be catch exception`)
 	}
 
-	return gvm.runtime.ToValue(provider)
+	return gvm.Runtime.ToValue(provider)
 }
 
 func (gvm *VMGlobal) GetBalance(account string) goja.Value {
-	chain, err := ChainGetter(&gvm.chainInfo)
+	chain, err := ChainGetter(&gvm.ChainInfo)
 	if err != nil {
-		gvm.runtime.Interrupt(`new chain error:` + err.Error())
-		return gvm.runtime.ToValue(`exception`)
+		gvm.Runtime.Interrupt(`new chain error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
 	}
 
 	balance, err := chain.GetBalance(account)
 	if err != nil {
-		gvm.runtime.Interrupt(`get chain balance error:` + err.Error())
-		return gvm.runtime.ToValue(`exception`)
+		gvm.Runtime.Interrupt(`get chain balance error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
 	}
 
-	return gvm.runtime.ToValue(balance)
+	return gvm.Runtime.ToValue(balance)
 }
 
 func (gvm *VMGlobal) GetTokenBalance(_tokenType TokenType, _contractAddress, _account string, _tokenID *big.Int) goja.Value {
-	chain, err := ChainGetter(&gvm.chainInfo)
+	chain, err := ChainGetter(&gvm.ChainInfo)
 	if err != nil {
-		gvm.runtime.Interrupt(`new chain error:` + err.Error())
-		return gvm.runtime.ToValue(`exception`)
+		gvm.Runtime.Interrupt(`new chain error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
 	}
 
 	balance, err := chain.GetTokenBalance(_tokenType, _contractAddress, _account, _tokenID)
 	if err != nil {
-		gvm.runtime.Interrupt(`get chain token balance error:` + err.Error())
-		return gvm.runtime.ToValue(`exception`)
+		gvm.Runtime.Interrupt(`get chain token balance error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
 	}
-	return gvm.runtime.ToValue(balance)
+	return gvm.Runtime.ToValue(balance)
 }
 
 func (gvm *VMGlobal) Call(to, data string) goja.Value {
-	chain, err := ChainGetter(&gvm.chainInfo)
+	chain, err := ChainGetter(&gvm.ChainInfo)
 	if err != nil {
-		gvm.runtime.Interrupt(`new chain error:` + err.Error())
-		return gvm.runtime.ToValue(`exception`)
+		gvm.Runtime.Interrupt(`new chain error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
 	}
 
 	callData, err := chain.Call(to, data)
 	if err != nil {
-		gvm.runtime.Interrupt(`call chain error:` + err.Error())
-		return gvm.runtime.ToValue(`exception`)
+		gvm.Runtime.Interrupt(`call chain error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
 	}
-	return  gvm.runtime.ToValue(callData)
+	return  gvm.Runtime.ToValue(callData)
 }
 
 func (gvm *VMGlobal) String2BigInt(number string) goja.Value {
-	return gvm.runtime.ToValue(String2BigInt(number))
+	return gvm.Runtime.ToValue(String2BigInt(number))
 }
