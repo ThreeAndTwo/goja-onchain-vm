@@ -1,4 +1,4 @@
-module github.com/ThreeAndTwo/goja_onchain_vm
+module github.com/ThreeAndTwo/goja-onchain-vm
 
 go 1.16
 
