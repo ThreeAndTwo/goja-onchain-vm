@@ -82,9 +82,9 @@ func TestEVMChain_GetProvider(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.gvm.init()
+			err := tt.gvm.Init()
 			if (err != nil) == tt.want {
-				t.Logf("init gvm error %s", err)
+				t.Logf("Init gvm error %s", err)
 				return
 			}
 
@@ -207,9 +207,9 @@ func TestEVMChain_GetBalance(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.gvm.init()
+			err := tt.gvm.Init()
 			if (err != nil) == tt.want {
-				t.Logf("init gvm error %s", err)
+				t.Logf("Init gvm error %s", err)
 				return
 			}
 
@@ -458,9 +458,9 @@ func TestEVMChain_GetTokenBalance(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.gvm.init()
+			err := tt.gvm.Init()
 			if (err != nil) == tt.want {
-				t.Logf("init gvm error %s", err)
+				t.Logf("Init gvm error %s", err)
 				return
 			}
 
@@ -639,9 +639,9 @@ func TestEVMChain_Call(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := tt.gvm.init()
+			err := tt.gvm.Init()
 			if (err != nil) == tt.want {
-				t.Logf("init gvm error %s", err)
+				t.Logf("Init gvm error %s", err)
 				return
 			}
 

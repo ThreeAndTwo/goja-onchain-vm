@@ -7,7 +7,7 @@ import (
 	"math/big"
 )
 
-func (gvm *VMGlobal) init() error {
+func (gvm *VMGlobal) Init() error {
 	registry := require.NewRegistry()
 	if !gvm.check() {
 		return fmt.Errorf("gvm config error, please check your config")
