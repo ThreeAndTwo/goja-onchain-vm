@@ -3,11 +3,11 @@ package goja_onchain_vm
 import (
 	"context"
 	"fmt"
+	"github.com/ThreeAndTwo/goja-onchain-vm/contract"
 	"github.com/deng00/ethutils"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"goja-onchain-vm/contract"
 	"math/big"
 )
 
