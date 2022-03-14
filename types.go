@@ -48,20 +48,20 @@ const (
 type VmFunc string
 
 const (
-	NEWPROVIDER     VmFunc = "newProvider"
-	GETBALANCE      VmFunc = "getBalance"
-	GETTOKENBALANCE VmFunc = "getTokenBalance"
-	CALL            VmFunc = "call"
-	STRING2BIGINT   VmFunc = "string2BigInt"
+	Balance         VmFunc = "balance"
+	TokenBalance    VmFunc = "tokenBalance"
+	CALL            VmFunc = "contractCall"
+	HttpGetRequest  VmFunc = "httpGetRequest"
+	HttpPostRequest VmFunc = "httpPostRequest"
 )
 
 type TokenType int64
 
 const (
-	NoType = iota
-	ERC20
-	ERC721
-	ERC1155
+	NoType  TokenType = iota
+	ERC20             = 20
+	ERC721            = 721
+	ERC1155           = 1155
 )
 
 type Call struct {

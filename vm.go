@@ -16,17 +16,13 @@ func (gvm *VMGlobal) Init() error {
 	vm := gvm.Runtime
 	registry.Enable(vm)
 	vm.SetFieldNameMapper(goja.TagFieldNameMapper("json", true))
-	err := vm.Set(string(NEWPROVIDER), gvm.NewProvider)
+
+	err := vm.Set(string(Balance), gvm.GetBalance)
 	if err != nil {
 		return err
 	}
 
-	err = vm.Set(string(GETBALANCE), gvm.GetBalance)
-	if err != nil {
-		return err
-	}
-
-	err = vm.Set(string(GETTOKENBALANCE), gvm.GetTokenBalance)
+	err = vm.Set(string(TokenBalance), gvm.GetTokenBalance)
 	if err != nil {
 		return err
 	}
@@ -36,27 +32,18 @@ func (gvm *VMGlobal) Init() error {
 		return err
 	}
 
-	return vm.Set(string(STRING2BIGINT), gvm.String2BigInt)
+	// http get
+	err = vm.Set(string(HttpGetRequest), gvm.HttpGet)
+	if err != nil {
+		return err
+	}
+
+	// http post
+	return vm.Set(string(HttpPostRequest), gvm.HttpPost)
 }
 
 func (gvm *VMGlobal) check() bool {
 	return nil != gvm && nil != gvm.Runtime
-}
-
-func (gvm *VMGlobal) NewProvider() goja.Value {
-	chain, err := ChainGetter(&gvm.ChainInfo)
-	if err != nil {
-		gvm.Runtime.Interrupt(`new chain error:` + err.Error())
-		return gvm.Runtime.ToValue(`should be catch exception`)
-	}
-
-	provider, err := chain.GetProvider()
-	if err != nil {
-		gvm.Runtime.Interrupt(`get chain provider error:` + err.Error())
-		return gvm.Runtime.ToValue(`should be catch exception`)
-	}
-
-	return gvm.Runtime.ToValue(provider)
 }
 
 func (gvm *VMGlobal) GetBalance(account string) goja.Value {
@@ -102,9 +89,20 @@ func (gvm *VMGlobal) Call(to, data string) goja.Value {
 		gvm.Runtime.Interrupt(`call chain error:` + err.Error())
 		return gvm.Runtime.ToValue(`exception`)
 	}
-	return  gvm.Runtime.ToValue(callData)
+	return gvm.Runtime.ToValue(callData)
 }
 
-func (gvm *VMGlobal) String2BigInt(number string) goja.Value {
-	return gvm.Runtime.ToValue(String2BigInt(number))
+func (gvm *VMGlobal) HttpGet(url string, params, header map[string]string) (string, error) {
+	reqHeader, _ := initHeader(header)
+	reqParam := initParam(params)
+	_req := NewGojaReq(url, reqHeader, reqParam, GET)
+	return _req.request()
+}
+
+func (gvm *VMGlobal) HttpPost(url string, params, header map[string]string) (string, error) {
+	reqHeader, isJson := initHeader(header)
+	reqParam := initParam(params)
+	_req := NewGojaReq(url, reqHeader, reqParam, POST)
+	_req.isJson = isJson
+	return _req.request()
 }
