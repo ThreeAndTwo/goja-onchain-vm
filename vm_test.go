@@ -5,6 +5,7 @@ import (
 	_ "github.com/dop251/goja_nodejs/console"
 	_ "github.com/dop251/goja_nodejs/require"
 	"testing"
+	"time"
 )
 
 var vm = goja.New()
@@ -45,12 +46,20 @@ function run(){
 
 	jsHttpGetRequest = `
 function run(){
-	return httpGetRequest();
+	return httpGetRequest("");
 }
 `
 	jsHttpPostRequest = `
 function run(){
-	return httpPostRequest();
+	return httpPostRequest("");
+}
+`
+	jsEndlessLoop = `
+function run(){
+	var i = 0;
+    for (;;) {
+        i++;
+    }
 }
 `
 )
@@ -235,15 +244,32 @@ func TestEVMChain_GetBalance(t *testing.T) {
 			script: jsGetNextAddress,
 			want:   true,
 		},
+		{
+			name: "endlessLoop",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   "",
+					Index: 0,
+				},
+			},
+			script: jsEndlessLoop,
+			want:   true,
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			startTime := time.Now().UnixMilli()
 			err := tt.gvm.Init()
-			if (err != nil) == tt.want {
+			t.Logf("duration time %d", time.Now().UnixMilli()-startTime)
+			if err != nil {
 				t.Logf("Init gvm error %s", err)
 				return
 			}
+			time.AfterFunc(200*time.Millisecond, func() {
+				vm.Interrupt("halt")
+			})
 
 			_, err = vm.RunString(tt.script)
 			runFunc, ok := goja.AssertFunction(vm.Get("run"))

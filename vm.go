@@ -1,9 +1,11 @@
 package goja_onchain_vm
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/require"
+	"github.com/imroc/req"
 	"math/big"
 )
 
@@ -32,17 +34,17 @@ func (gvm *VMGlobal) Init() error {
 		return err
 	}
 
-	err = vm.Set(string(GetAddress), gvm.GetAddress())
+	err = vm.Set(string(GetAddress), gvm.GetAddress)
 	if err != nil {
 		return err
 	}
 
-	err = vm.Set(string(GetPreAddress), gvm.GetPreAddress())
+	err = vm.Set(string(GetPreAddress), gvm.GetPreAddress)
 	if err != nil {
 		return err
 	}
 
-	err = vm.Set(string(GetNextAddress), gvm.GetNextAddress())
+	err = vm.Set(string(GetNextAddress), gvm.GetNextAddress)
 	if err != nil {
 		return err
 	}
@@ -107,19 +109,56 @@ func (gvm *VMGlobal) Call(to, data string) goja.Value {
 	return gvm.Runtime.ToValue(callData)
 }
 
-func (gvm *VMGlobal) HttpGet(url string, params, header map[string]string) (string, error) {
-	reqHeader, _ := initHeader(header)
-	reqParam := initParam(params)
-	_req := NewGojaReq(url, reqHeader, reqParam, GET)
-	return _req.request()
+func (gvm *VMGlobal) HttpGet(url, params, header string) goja.Value {
+	reqHeader, reqParam, _, err := getReqParam(params, header)
+	if err != nil {
+		gvm.Runtime.Interrupt(err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	_req := NewGojaReq(url, reqHeader, reqParam, POST)
+	resp, err := _req.request()
+	if err != nil {
+		gvm.Runtime.Interrupt(`http request error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+	return gvm.Runtime.ToValue(resp)
 }
 
-func (gvm *VMGlobal) HttpPost(url string, params, header map[string]string) (string, error) {
-	reqHeader, isJson := initHeader(header)
-	reqParam := initParam(params)
+func (gvm *VMGlobal) HttpPost(url, params, header string) goja.Value {
+	reqHeader, reqParam, isJson, err := getReqParam(params, header)
+	if err != nil {
+		gvm.Runtime.Interrupt(err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
 	_req := NewGojaReq(url, reqHeader, reqParam, POST)
 	_req.isJson = isJson
-	return _req.request()
+	resp, err := _req.request()
+	if err != nil {
+		gvm.Runtime.Interrupt(`http request error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+	return gvm.Runtime.ToValue(resp)
+}
+
+func getReqParam(params, header string) (req.Header, req.Param, bool, error) {
+	headerMap := make(map[string]string)
+	paramsMap := make(map[string]string)
+
+	err := json.Unmarshal([]byte(header), &headerMap)
+	if err != nil {
+		return nil, nil, false, fmt.Errorf("http params invalidate for header: %s", header)
+	}
+
+	err = json.Unmarshal([]byte(params), &paramsMap)
+	if err != nil {
+		return nil, nil, false, fmt.Errorf("http params invalidate for params: %s", params)
+	}
+
+	reqHeader, isJson := initHeader(headerMap)
+	reqParam := initParam(paramsMap)
+	return reqHeader, reqParam, isJson, nil
 }
 
 func (gvm *VMGlobal) GetAddress() goja.Value {
@@ -138,7 +177,7 @@ func (gvm *VMGlobal) GetNextAddress() goja.Value {
 
 func (gvm *VMGlobal) getAddress() goja.Value {
 	if gvm.checkAddress() {
-		gvm.Runtime.Interrupt(`params invalidate for address`)
+		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 		return gvm.Runtime.ToValue(`exception`)
 	}
 	address := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAddress().String()
