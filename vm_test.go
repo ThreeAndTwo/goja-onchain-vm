@@ -10,28 +10,47 @@ import (
 var vm = goja.New()
 
 const (
-	scriptCall = `
+	mnemonic = `abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon cactus`
+
+	jsCall = `
 function run(){
     return contractCall("0xCc13Fc627EFfd6E35D2D2706Ea3C4D7396c610ea", "0x8da5cb5b");
 }`
-	scriptBalance = `
+	jsBalance = `
 function run(){
-	return balance("0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0")
+	return balance("0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0");
 }
 `
-	scriptTokenBalance = `
+	jsTokenBalance = `
 function run(){
-	return tokenBalance(20, "0xdac17f958d2ee523a2206206994597c13d831ec7","0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0")
+	return tokenBalance(20, "0xdac17f958d2ee523a2206206994597c13d831ec7","0xa8C731e9259CE796B417A02aE7cd0Cdcdd2057a0");
+}`
+
+	jsGetAddress = `
+function run(){
+	return getAddress();
 }
 `
-	scriptHttpGetRequest = `
+	jsGetPreAddress = `
 function run(){
-	return httpGetRequest()
+	return getPreAddress();
 }
 `
-	scriptHttpPostRequest = `
+
+	jsGetNextAddress = `
 function run(){
-	return httpPostRequest()
+	return getNextAddress();
+}
+`
+
+	jsHttpGetRequest = `
+function run(){
+	return httpGetRequest();
+}
+`
+	jsHttpPostRequest = `
+function run(){
+	return httpPostRequest();
 }
 `
 )
@@ -53,7 +72,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: scriptCall,
+			script: jsCall,
 			want:   true,
 		},
 		{
@@ -66,7 +85,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: scriptBalance,
+			script: jsBalance,
 			want:   true,
 		},
 		{
@@ -79,7 +98,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: scriptTokenBalance,
+			script: jsTokenBalance,
 			want:   true,
 		},
 		{
@@ -92,7 +111,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: scriptHttpGetRequest,
+			script: jsHttpGetRequest,
 			want:   true,
 		},
 		{
@@ -105,7 +124,115 @@ func TestEVMChain_GetBalance(t *testing.T) {
 					"",
 				},
 			},
-			script: scriptHttpPostRequest,
+			script: jsHttpPostRequest,
+			want:   true,
+		},
+		{
+			name: "normal for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 0,
+				},
+			},
+			script: jsGetAddress,
+			want:   true,
+		},
+		{
+			name: "index out for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: -1,
+				},
+			},
+			script: jsGetAddress,
+			want:   true,
+		},
+		{
+			name: "mnemonic is null",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   "",
+					Index: 1,
+				},
+			},
+			script: jsGetAddress,
+			want:   true,
+		},
+		{
+			name: "normal for getPreAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 1,
+				},
+			},
+			script: jsGetPreAddress,
+			want:   true,
+		},
+		{
+			name: "index out for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 0,
+				},
+			},
+			script: jsGetPreAddress,
+			want:   true,
+		},
+		{
+			name: "mnemonic is null",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   "",
+					Index: 1,
+				},
+			},
+			script: jsGetPreAddress,
+			want:   true,
+		},
+		{
+			name: "normal for getNextAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 0,
+				},
+			},
+			script: jsGetNextAddress,
+			want:   true,
+		},
+		{
+			name: "index out for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: -2,
+				},
+			},
+			script: jsGetNextAddress,
+			want:   true,
+		},
+		{
+			name: "mnemonic is null",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   "",
+					Index: 0,
+				},
+			},
+			script: jsGetNextAddress,
 			want:   true,
 		},
 	}

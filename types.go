@@ -6,14 +6,20 @@ import (
 )
 
 type VMGlobal struct {
-	Runtime   *goja.Runtime
-	ChainInfo ChainInfo
+	Runtime     *goja.Runtime
+	ChainInfo   ChainInfo
+	AccountInfo AccountInfo
 }
 
 type ChainInfo struct {
 	ChainId int
 	Rpc     string
 	Wss     string
+}
+
+type AccountInfo struct {
+	Key   string
+	Index int
 }
 
 type ChainMCallGetter struct {
@@ -51,6 +57,9 @@ const (
 	Balance         VmFunc = "balance"
 	TokenBalance    VmFunc = "tokenBalance"
 	CALL            VmFunc = "contractCall"
+	GetAddress      VmFunc = "getAddress"
+	GetPreAddress   VmFunc = "getPreAddress"
+	GetNextAddress  VmFunc = "getNextAddress"
 	HttpGetRequest  VmFunc = "httpGetRequest"
 	HttpPostRequest VmFunc = "httpPostRequest"
 )

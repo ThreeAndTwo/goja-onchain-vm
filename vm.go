@@ -32,6 +32,21 @@ func (gvm *VMGlobal) Init() error {
 		return err
 	}
 
+	err = vm.Set(string(GetAddress), gvm.GetAddress())
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(GetPreAddress), gvm.GetPreAddress())
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(GetNextAddress), gvm.GetNextAddress())
+	if err != nil {
+		return err
+	}
+
 	// http get
 	err = vm.Set(string(HttpGetRequest), gvm.HttpGet)
 	if err != nil {
@@ -105,4 +120,31 @@ func (gvm *VMGlobal) HttpPost(url string, params, header map[string]string) (str
 	_req := NewGojaReq(url, reqHeader, reqParam, POST)
 	_req.isJson = isJson
 	return _req.request()
+}
+
+func (gvm *VMGlobal) GetAddress() goja.Value {
+	return gvm.getAddress()
+}
+
+func (gvm *VMGlobal) GetPreAddress() goja.Value {
+	gvm.AccountInfo.Index--
+	return gvm.getAddress()
+}
+
+func (gvm *VMGlobal) GetNextAddress() goja.Value {
+	gvm.AccountInfo.Index++
+	return gvm.getAddress()
+}
+
+func (gvm *VMGlobal) getAddress() goja.Value {
+	if gvm.checkAddress() {
+		gvm.Runtime.Interrupt(`params invalidate for address`)
+		return gvm.Runtime.ToValue(`exception`)
+	}
+	address := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAddress().String()
+	return gvm.Runtime.ToValue(address)
+}
+
+func (gvm *VMGlobal) checkAddress() bool {
+	return gvm.AccountInfo.Key == "" || gvm.AccountInfo.Index < 0
 }
