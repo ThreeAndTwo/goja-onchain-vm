@@ -12,7 +12,7 @@ type VMGlobal struct {
 }
 
 type ChainInfo struct {
-	ChainId int
+	ChainId int64
 	Rpc     string
 	Wss     string
 }

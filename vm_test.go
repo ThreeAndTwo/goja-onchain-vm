@@ -267,7 +267,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				t.Logf("Init gvm error %s", err)
 				return
 			}
-			time.AfterFunc(200*time.Millisecond, func() {
+			time.AfterFunc(5*time.Second, func() {
 				vm.Interrupt("halt")
 			})
 
