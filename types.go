@@ -54,14 +54,15 @@ const (
 type VmFunc string
 
 const (
-	Balance         VmFunc = "balance"
-	TokenBalance    VmFunc = "tokenBalance"
-	CALL            VmFunc = "contractCall"
-	GetAddress      VmFunc = "getAddress"
-	GetPreAddress   VmFunc = "getPreAddress"
-	GetNextAddress  VmFunc = "getNextAddress"
-	HttpGetRequest  VmFunc = "httpGetRequest"
-	HttpPostRequest VmFunc = "httpPostRequest"
+	Balance           VmFunc = "balance"
+	TokenBalance      VmFunc = "tokenBalance"
+	CALL              VmFunc = "contractCall"
+	GetAddress        VmFunc = "getAddress"
+	GetPreAddress     VmFunc = "getPreAddress"
+	GetNextAddress    VmFunc = "getNextAddress"
+	GetAddressByIndex VmFunc = "getAddressByIndex"
+	HttpGetRequest    VmFunc = "httpGetRequest"
+	HttpPostRequest   VmFunc = "httpPostRequest"
 )
 
 type TokenType int64

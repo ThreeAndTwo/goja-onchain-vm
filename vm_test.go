@@ -62,6 +62,11 @@ function run(){
     }
 }
 `
+	jsGetAddressByIndex = `
+function run() {
+	return getAddressByIndex(100)
+}
+`
 )
 
 func TestEVMChain_GetBalance(t *testing.T) {
@@ -142,7 +147,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				Runtime: vm,
 				AccountInfo: AccountInfo{
 					Key:   mnemonic,
-					Index: 0,
+					Index: 100,
 				},
 			},
 			script: jsGetAddress,
@@ -254,6 +259,18 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				},
 			},
 			script: jsEndlessLoop,
+			want:   true,
+		},
+		{
+			name: "get address by index",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 0,
+				},
+			},
+			script: jsGetAddressByIndex,
 			want:   true,
 		},
 	}
