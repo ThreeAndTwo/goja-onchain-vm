@@ -18,14 +18,7 @@ type EVMChain struct {
 }
 
 func ChainGetter(_chainInfo *ChainInfo) (IChain, error) {
-	chainID := ChainID(_chainInfo.ChainId)
-
-	switch chainID {
-	case ETH, CRONOS, BSC, HECO, OKEX, FTM, OPTIMISTIC, POLYGON, ARBITRUMONE, AVALANCHE:
-		return NewEVMChain(_chainInfo)
-	default:
-		return nil, fmt.Errorf("unsupport chain")
-	}
+	return NewEVMChain(_chainInfo)
 }
 
 func NewEVMChain(_chainInfo *ChainInfo) (*EVMChain, error) {

@@ -7,6 +7,7 @@ import (
 	"github.com/dop251/goja_nodejs/require"
 	"github.com/imroc/req"
 	"math/big"
+	"strings"
 )
 
 func (gvm *VMGlobal) Init() error {
@@ -50,6 +51,11 @@ func (gvm *VMGlobal) Init() error {
 	}
 
 	err = vm.Set(string(GetAddressByIndex), gvm.GetAddressByIndex)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(GetAddressListByIndex), gvm.GetAddressListByIndex)
 	if err != nil {
 		return err
 	}
@@ -192,6 +198,23 @@ func (gvm *VMGlobal) getAddress() goja.Value {
 	}
 	address := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAddress().String()
 	return gvm.Runtime.ToValue(address)
+}
+
+func (gvm *VMGlobal) GetAddressListByIndex(start, end int) goja.Value {
+	gvm.AccountInfo.Index = start
+	if gvm.checkAddress() {
+		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	var arrAddr []string
+	for k := start; k < end; k++ {
+		gvm.AccountInfo.Index = k
+		addr := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAddress().String()
+		arrAddr = append(arrAddr, addr)
+	}
+	addresses := strings.Join(arrAddr, ",")
+	return gvm.Runtime.ToValue(addresses)
 }
 
 func (gvm *VMGlobal) checkAddress() bool {

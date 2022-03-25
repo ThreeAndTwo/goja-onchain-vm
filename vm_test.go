@@ -67,6 +67,16 @@ function run() {
 	return getAddressByIndex(100)
 }
 `
+	jsGetAddressListByIndex = `
+function run() {
+	return getAddressListByIndex(1,100)
+}
+`
+	jsGetAddressListByIndexError = `
+function run() {
+	return getAddressListByIndex(-1, 1)
+}
+`
 )
 
 func TestEVMChain_GetBalance(t *testing.T) {
@@ -271,6 +281,30 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				},
 			},
 			script: jsGetAddressByIndex,
+			want:   true,
+		},
+		{
+			name: "get address list by index success",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 0,
+				},
+			},
+			script: jsGetAddressListByIndex,
+			want:   true,
+		},
+		{
+			name: "get address list by index failed",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 0,
+				},
+			},
+			script: jsGetAddressListByIndexError,
 			want:   true,
 		},
 	}
