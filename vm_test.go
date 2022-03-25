@@ -77,6 +77,30 @@ function run() {
 	return getAddressListByIndex(-1, 1)
 }
 `
+	jsGetCurrentIndex = `
+function run() {
+	var tokenList = [100,200,300,400]
+	return tokenList[getCurrentIndex()]
+}
+`
+	jsGetCurrentIndexViaString = `
+function run() {
+	var tokenList = ["100","200","300","400"]
+	return tokenList[getCurrentIndex()]
+}
+`
+	jsGetCurrentIndexViaMix = `
+function run() {
+	var tokenList = [1, "200", 30, "4"]
+	return tokenList[getCurrentIndex()]
+}
+`
+	jsGetCurrentIndexViaErr = `
+function run() {
+	var tokenList = [100,"200","30,"40"]
+	return tokenList[getCurrentIndex()]
+}
+`
 )
 
 func TestEVMChain_GetBalance(t *testing.T) {
@@ -305,6 +329,54 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				},
 			},
 			script: jsGetAddressListByIndexError,
+			want:   true,
+		},
+		{
+			name: "get current index",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 0,
+				},
+			},
+			script: jsGetCurrentIndex,
+			want:   true,
+		},
+		{
+			name: "get current index via string",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 1,
+				},
+			},
+			script: jsGetCurrentIndexViaString,
+			want:   true,
+		},
+		{
+			name: "get current index via mix",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 2,
+				},
+			},
+			script: jsGetCurrentIndexViaMix,
+			want:   true,
+		},
+		{
+			name: "get current index via error",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   mnemonic,
+					Index: 3,
+				},
+			},
+			script: jsGetCurrentIndexViaErr,
 			want:   true,
 		},
 	}

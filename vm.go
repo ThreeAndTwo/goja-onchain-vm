@@ -60,6 +60,11 @@ func (gvm *VMGlobal) Init() error {
 		return err
 	}
 
+	err = vm.Set(string(GetCurrentIndex), gvm.GetCurrentIndex)
+	if err != nil {
+		return err
+	}
+
 	// http get
 	err = vm.Set(string(HttpGetRequest), gvm.HttpGet)
 	if err != nil {
@@ -219,4 +224,8 @@ func (gvm *VMGlobal) GetAddressListByIndex(start, end int) goja.Value {
 
 func (gvm *VMGlobal) checkAddress() bool {
 	return gvm.AccountInfo.Key == "" || gvm.AccountInfo.Index < 0
+}
+
+func (gvm *VMGlobal) GetCurrentIndex() goja.Value {
+	return gvm.Runtime.ToValue(gvm.AccountInfo.Index)
 }

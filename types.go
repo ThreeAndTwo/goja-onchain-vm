@@ -62,6 +62,7 @@ const (
 	GetNextAddress        VmFunc = "getNextAddress"
 	GetAddressByIndex     VmFunc = "getAddressByIndex"
 	GetAddressListByIndex VmFunc = "getAddressListByIndex"
+	GetCurrentIndex       VmFunc = "getCurrentIndex"
 	HttpGetRequest        VmFunc = "httpGetRequest"
 	HttpPostRequest       VmFunc = "httpPostRequest"
 )
