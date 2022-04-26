@@ -2,6 +2,7 @@ package goja_onchain_vm
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/imroc/req"
 	"strings"
 )
@@ -39,7 +40,7 @@ func initHeader(header map[string]string) (req.Header, bool) {
 }
 
 func hasJsonInHeader(key, value string) bool {
-	return strings.ToLower(key) == "accept" && strings.Contains(strings.ToLower(value), "json")
+	return strings.ToLower(key) == "content-type" && strings.Contains(strings.ToLower(value), "json")
 }
 
 func initParam(params map[string]string) req.Param {
@@ -50,7 +51,14 @@ func initParam(params map[string]string) req.Param {
 	return reqParams
 }
 
+func (gReq *gojaReq) check() bool {
+	return gReq.url == ""
+}
+
 func (gReq *gojaReq) request() (string, error) {
+	if gReq.check() {
+		return "", fmt.Errorf("url should be null")
+	}
 
 	switch gReq.reqType {
 	case POST:
@@ -71,7 +79,9 @@ func (gReq *gojaReq) post() (string, error) {
 	} else {
 		reqResp, err = req.Post(gReq.url, gReq.param, gReq.header)
 	}
-	return reqResp.String(), err
+
+	msHeader, _ := json.Marshal(reqResp.Response().Header)
+	return reqResp.String() + "||" + string(msHeader), err
 }
 
 func (gReq *gojaReq) get() (string, error) {
@@ -79,5 +89,10 @@ func (gReq *gojaReq) get() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return resp.String(), nil
+
+	msHeader, err := json.Marshal(resp.Response().Header)
+	if err != nil {
+		return "", err
+	}
+	return resp.String() + "||" + string(msHeader), nil
 }

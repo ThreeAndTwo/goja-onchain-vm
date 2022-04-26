@@ -36,21 +36,6 @@ type TokenInfo struct {
 	TotalSupply *multicall.BigIntJSONString `json:"total_supply"`
 }
 
-type ChainID int
-
-const (
-	ETH         ChainID = 1
-	OPTIMISTIC  ChainID = 10
-	CRONOS      ChainID = 25
-	BSC         ChainID = 56
-	OKEX        ChainID = 66
-	HECO        ChainID = 128
-	POLYGON     ChainID = 137
-	FTM         ChainID = 250
-	ARBITRUMONE ChainID = 42161
-	AVALANCHE   ChainID = 43114
-)
-
 type VmFunc string
 
 const (
@@ -63,6 +48,7 @@ const (
 	GetAddressByIndex     VmFunc = "getAddressByIndex"
 	GetAddressListByIndex VmFunc = "getAddressListByIndex"
 	GetCurrentIndex       VmFunc = "getCurrentIndex"
+	PersonalSign          VmFunc = "personalSign"
 	HttpGetRequest        VmFunc = "httpGetRequest"
 	HttpPostRequest       VmFunc = "httpPostRequest"
 )

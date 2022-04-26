@@ -4,6 +4,7 @@ import (
 	"github.com/dop251/goja"
 	_ "github.com/dop251/goja_nodejs/console"
 	_ "github.com/dop251/goja_nodejs/require"
+	"os"
 	"testing"
 	"time"
 )
@@ -46,7 +47,13 @@ function run(){
 
 	jsHttpGetRequest = `
 function run(){
-	return httpGetRequest("");
+	var console = require('console')
+	var data = httpGetRequest("https://demo.example.com/api/v1/connect?walletAddress=0x00")
+	var dataArr = data.split('||')
+	
+	var reqData = JSON.parse(dataArr[0])
+	console.log("cookie:", dataArr[1])
+	return reqData.data
 }
 `
 	jsHttpPostRequest = `
@@ -54,6 +61,51 @@ function run(){
 	return httpPostRequest("");
 }
 `
+
+	jsHttpPostRequestContainsHeader = `
+function run(){
+	var console = require('console');
+	var header = "{\"content-type\": \"application\/json\"}";
+	var params = "{\"signature\":\"0x00\",\"walletAddress\":\"0x00\"}";
+	
+	var reqData = httpPostRequest('https://demo.example.com/api/v1/sign-in', params, header);
+	var dataArr = reqData.split('||');
+
+	var data = JSON.parse(dataArr[0]);
+	console.log("data:", dataArr[0]);
+	console.log("cookie:", dataArr[1]);
+	return data.data;
+}
+`
+	jsHttpMix = `
+		var console = require('console');
+		var data = httpGetRequest("https://demo.example.com/api/v1/connect?walletAddress=0x00");
+		var dataArr = data.split('||');
+
+		var message = JSON.parse(dataArr[0]);
+		var signMessage = personalSign(message.data);
+
+		var header = "{\"content-type\": \"application\/json\"}";
+		var params = "{\"signature\":\""+ signMessage +"\",\"walletAddress\":\"0x00\"}";
+
+		var signInData = httpPostRequest('https://demo.example.com/api/v1/sign-in', params, header);
+		var signInArr = signInData.split('||');
+		var signCookie = JSON.parse(signInArr[1]);
+		
+		var myRe = /authorization=(\S*); Path=/;
+		var myArray = myRe.exec(signCookie['Set-Cookie']);
+		var cookieArr = myArray[0].split(';');
+
+		var signCookie = "NEXT_LOCALE=en; " + cookieArr[0] + "; tr=" + Date.parse(new Date());
+		var signHeader = "{\"cookie\": \""+ signCookie +"\"}";	
+		var signData = httpGetRequest("https://demo.example.com/api/v1/firework-mint-data?walletAddress=0x00&amount=3", signHeader);
+		
+		var signDataArr = signData.split('||');
+		var inputData = JSON.parse(signDataArr[0]);
+		console.log("inputData:", inputData.data);
+		return inputData.data
+`
+
 	jsEndlessLoop = `
 function run(){
 	var i = 0;
@@ -101,9 +153,16 @@ function run() {
 	return tokenList[getCurrentIndex()]
 }
 `
+	jsPersonalSign = `
+function run() {
+	var message = "Welcome to TRLab!\nWallet address:\n0x00\nNonce\n653888"
+	var signMessage = personalSign(message)
+	return signMessage
+}
+`
 )
 
-func TestEVMChain_GetBalance(t *testing.T) {
+func TestEVMChain(t *testing.T) {
 	tests := []struct {
 		name   string
 		gvm    *VMGlobal
@@ -173,6 +232,31 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				},
 			},
 			script: jsHttpPostRequest,
+			want:   true,
+		},
+		{
+			name: "normal http",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					1,
+					"https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					"",
+				},
+			},
+			script: jsHttpPostRequestContainsHeader,
+			want:   true,
+		},
+		{
+			name: "normal js mix",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					Key:   os.Getenv("MNEMONIC"),
+					Index: 0,
+				},
+			},
+			script: jsHttpMix,
 			want:   true,
 		},
 		{
@@ -379,6 +463,23 @@ func TestEVMChain_GetBalance(t *testing.T) {
 			script: jsGetCurrentIndexViaErr,
 			want:   true,
 		},
+		{
+			name: "sign message",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     "",
+				},
+				AccountInfo: AccountInfo{
+					Key:   os.Getenv("MNEMONIC"),
+					Index: 0,
+				},
+			},
+			script: jsPersonalSign,
+			want:   true,
+		},
 	}
 
 	for _, tt := range tests {
@@ -390,7 +491,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 				t.Logf("Init gvm error %s", err)
 				return
 			}
-			time.AfterFunc(5*time.Second, func() {
+			time.AfterFunc(100*time.Second, func() {
 				vm.Interrupt("halt")
 			})
 
@@ -402,7 +503,7 @@ func TestEVMChain_GetBalance(t *testing.T) {
 			}
 			value, err := runFunc(goja.Undefined())
 			if err != nil {
-				if _, ok := err.(*goja.InterruptedError); ok {
+				if _, ok = err.(*goja.InterruptedError); ok {
 					t.Logf(`InterruptedError: %s`, err)
 				} else {
 					t.Errorf("unkonw error %s", err)

@@ -3,8 +3,10 @@ package goja_onchain_vm
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/deng00/ethutils"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/require"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/imroc/req"
 	"math/big"
 	"strings"
@@ -61,6 +63,11 @@ func (gvm *VMGlobal) Init() error {
 	}
 
 	err = vm.Set(string(GetCurrentIndex), gvm.GetCurrentIndex)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(PersonalSign), gvm.GetPersonalSign)
 	if err != nil {
 		return err
 	}
@@ -132,13 +139,13 @@ func (gvm *VMGlobal) HttpGet(url, params, header string) goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
-	_req := NewGojaReq(url, reqHeader, reqParam, POST)
-	resp, err := _req.request()
+	_req := NewGojaReq(url, reqHeader, reqParam, GET)
+	data, err := _req.request()
 	if err != nil {
 		gvm.Runtime.Interrupt(`http request error:` + err.Error())
 		return gvm.Runtime.ToValue(`exception`)
 	}
-	return gvm.Runtime.ToValue(resp)
+	return gvm.Runtime.ToValue(data)
 }
 
 func (gvm *VMGlobal) HttpPost(url, params, header string) goja.Value {
@@ -162,14 +169,18 @@ func getReqParam(params, header string) (req.Header, req.Param, bool, error) {
 	headerMap := make(map[string]string)
 	paramsMap := make(map[string]string)
 
-	err := json.Unmarshal([]byte(header), &headerMap)
-	if err != nil {
-		return nil, nil, false, fmt.Errorf("http params invalidate for header: %s", header)
+	if header != "" {
+		err := json.Unmarshal([]byte(header), &headerMap)
+		if err != nil {
+			return nil, nil, false, fmt.Errorf("http params invalidate for header: %s", header)
+		}
 	}
 
-	err = json.Unmarshal([]byte(params), &paramsMap)
-	if err != nil {
-		return nil, nil, false, fmt.Errorf("http params invalidate for params: %s", params)
+	if params != "" {
+		err := json.Unmarshal([]byte(params), &paramsMap)
+		if err != nil {
+			return nil, nil, false, fmt.Errorf("http params invalidate for params: %s", params)
+		}
 	}
 
 	reqHeader, isJson := initHeader(headerMap)
@@ -201,7 +212,14 @@ func (gvm *VMGlobal) getAddress() goja.Value {
 		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 		return gvm.Runtime.ToValue(`exception`)
 	}
-	address := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAddress().String()
+
+	account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
+	if account == nil {
+		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	address := account.Address.String()
 	return gvm.Runtime.ToValue(address)
 }
 
@@ -215,7 +233,14 @@ func (gvm *VMGlobal) GetAddressListByIndex(start, end int) goja.Value {
 	var arrAddr []string
 	for k := start; k < end; k++ {
 		gvm.AccountInfo.Index = k
-		addr := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAddress().String()
+
+		account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
+		if account == nil {
+			gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+			return gvm.Runtime.ToValue(`exception`)
+		}
+
+		addr := account.Address.String()
 		arrAddr = append(arrAddr, addr)
 	}
 	addresses := strings.Join(arrAddr, ",")
@@ -228,4 +253,25 @@ func (gvm *VMGlobal) checkAddress() bool {
 
 func (gvm *VMGlobal) GetCurrentIndex() goja.Value {
 	return gvm.Runtime.ToValue(gvm.AccountInfo.Index)
+}
+
+func (gvm *VMGlobal) GetPersonalSign(message string) goja.Value {
+	if gvm.checkAddress() {
+		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
+	if account == nil {
+		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	signature, err := ethutils.Sign([]byte(message), account.PrivateKey)
+	if err != nil {
+		gvm.Runtime.Interrupt(`get sign error, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index) +
+			`error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+	return gvm.Runtime.ToValue(hexutil.Encode(signature))
 }

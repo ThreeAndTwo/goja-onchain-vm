@@ -1,7 +1,7 @@
 package goja_onchain_vm
 
 import (
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/deng00/ethutils"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"math/big"
 )
@@ -15,5 +15,5 @@ type IChain interface {
 }
 
 type IAccount interface {
-	GetAddress() common.Address
+	GetAccount() *ethutils.Account
 }
