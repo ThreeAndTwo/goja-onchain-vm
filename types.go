@@ -9,6 +9,7 @@ type VMGlobal struct {
 	Runtime     *goja.Runtime
 	ChainInfo   ChainInfo
 	AccountInfo AccountInfo
+	PublicKey   string
 }
 
 type ChainInfo struct {
@@ -51,6 +52,7 @@ const (
 	PersonalSign          VmFunc = "personalSign"
 	HttpGetRequest        VmFunc = "httpGetRequest"
 	HttpPostRequest       VmFunc = "httpPostRequest"
+	EncryptWithPubKey     VmFunc = "encryptWithPubKey"
 )
 
 type TokenType int64

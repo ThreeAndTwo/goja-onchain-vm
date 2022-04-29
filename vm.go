@@ -3,6 +3,7 @@ package goja_onchain_vm
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/btcsuite/btcd/btcec"
 	"github.com/deng00/ethutils"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/require"
@@ -68,6 +69,11 @@ func (gvm *VMGlobal) Init() error {
 	}
 
 	err = vm.Set(string(PersonalSign), gvm.GetPersonalSign)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(EncryptWithPubKey), gvm.EncryptWithPubKey)
 	if err != nil {
 		return err
 	}
@@ -274,4 +280,30 @@ func (gvm *VMGlobal) GetPersonalSign(message string) goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 	return gvm.Runtime.ToValue(hexutil.Encode(signature))
+}
+
+func (gvm *VMGlobal) EncryptWithPubKey(message string) goja.Value {
+	if gvm.PublicKey == "" || message == "" {
+		gvm.Runtime.Interrupt(`params invalidate for encryptWithPubKey`)
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	signerKey, err := hexutil.Decode("0x" + string(gvm.PublicKey))
+	if err != nil {
+		gvm.Runtime.Interrupt(`decode public key error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	pubKey, err := btcec.ParsePubKey(signerKey, btcec.S256())
+	if err != nil {
+		gvm.Runtime.Interrupt(`parse public key error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	encryptData, err := btcec.Encrypt(pubKey, []byte(message))
+	if err != nil {
+		gvm.Runtime.Interrupt(`encrypt data error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+	return gvm.Runtime.ToValue(hexutil.Encode(encryptData))
 }

@@ -160,6 +160,18 @@ function run() {
 	return signMessage
 }
 `
+	jsEncryptPubKey = `
+function run() {
+	var message = '{"chain_id":1,"account":"test","to":"0x287e21B9201E98ef3E2E0e8759Ee36Ca8257a6d2","message":"aaaaaa"}'
+	return encryptWithPubKey(message)
+}
+`
+	jsEncryptPubKeyGetAccount = `
+function run() {
+	var message = '{"chain_id":1,"account":"test","to":"0x287e21B9201E98ef3E2E0e8759Ee36Ca8257a6d2"}'
+	return encryptWithPubKey(message)
+}
+`
 )
 
 func TestEVMChain(t *testing.T) {
@@ -478,6 +490,30 @@ func TestEVMChain(t *testing.T) {
 				},
 			},
 			script: jsPersonalSign,
+			want:   true,
+		},
+		{
+			name: "encrypt with pubKey",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "",
+					Wss:     "",
+				},
+				AccountInfo: AccountInfo{},
+				PublicKey:   os.Getenv("PUBKEY"),
+			},
+			script: jsEncryptPubKey,
+			want:   true,
+		},
+		{
+			name: "encrypt with pubKey2",
+			gvm: &VMGlobal{
+				Runtime:   vm,
+				PublicKey: os.Getenv("PUBKEY"),
+			},
+			script: jsEncryptPubKeyGetAccount,
 			want:   true,
 		},
 	}
