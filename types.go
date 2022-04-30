@@ -76,3 +76,7 @@ type Call struct {
 	To   string `json:"to"`
 	Data string `json:"data"`
 }
+
+type RemoteData struct {
+	Data string `json:"data"`
+}
