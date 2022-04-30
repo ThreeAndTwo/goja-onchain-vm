@@ -219,6 +219,13 @@ func (gvm *VMGlobal) getAddress() goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
+	if gvm.AccountInfo.AccountType != "" {
+		// remote
+		header := `{"content-type": "application/json"}`
+		var encryptParam = gvm.EncryptWithPubKey(gvm.Remote.Params)
+		encryptMsg := `{"encryptMsg":"` + encryptParam.String() + `"}`
+		return gvm.HttpPost(gvm.Remote.Url, encryptMsg, header)
+	}
 	account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
 	if account == nil {
 		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))

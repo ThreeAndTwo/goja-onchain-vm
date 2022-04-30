@@ -288,9 +288,15 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: -1,
+					AccountType: "remote",
+					Key:         mnemonic,
+					Index:       0,
 				},
+				Remote: RemoteInfo{
+					Url:    "http://127.0.0.1/ping",
+					Params: `{"chain_id": 1}`,
+				},
+				PublicKey: os.Getenv("PUBKEY"),
 			},
 			script: jsGetAddress,
 			want:   true,

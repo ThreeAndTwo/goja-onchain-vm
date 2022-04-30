@@ -80,6 +80,10 @@ func (gReq *gojaReq) post() (string, error) {
 		reqResp, err = req.Post(gReq.url, gReq.param, gReq.header)
 	}
 
+	if err != nil {
+		return "", err
+	}
+
 	msHeader, _ := json.Marshal(reqResp.Response().Header)
 	return reqResp.String() + "||" + string(msHeader), err
 }
