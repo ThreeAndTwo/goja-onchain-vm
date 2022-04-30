@@ -228,7 +228,15 @@ func (gvm *VMGlobal) getAddress() goja.Value {
 		encryptMsg := `{"encryptMsg":"` + encryptParam.String() + `"}`
 
 		data := &RemoteData{}
-		err := json.Unmarshal([]byte(gvm.HttpPost(gvm.Url+"/address", encryptMsg, header).String()), data)
+		res := gvm.HttpPost(gvm.Url+"/address", encryptMsg, header).String()
+		resArr := strings.Split(res, "||")
+
+		if len(resArr) == 0 {
+			gvm.Runtime.Interrupt(`get remote address error, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+			return gvm.Runtime.ToValue(`exception`)
+		}
+
+		err := json.Unmarshal([]byte(resArr[0]), data)
 		if err != nil {
 			gvm.Runtime.Interrupt(`get remote address error, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 			return gvm.Runtime.ToValue(`exception`)
