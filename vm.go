@@ -222,9 +222,11 @@ func (gvm *VMGlobal) getAddress() goja.Value {
 	if gvm.AccountInfo.AccountType != "" {
 		// remote
 		header := `{"content-type": "application/json"}`
-		var encryptParam = gvm.EncryptWithPubKey(gvm.Remote.Params)
+		params := fmt.Sprintf(`{"chain_id": %d, "account": "%s", "index": %d, "to": "%s"}`,
+			gvm.ChainInfo.ChainId, gvm.AccountInfo.Key, gvm.AccountInfo.Index, gvm.AccountInfo.To)
+		var encryptParam = gvm.EncryptWithPubKey(params)
 		encryptMsg := `{"encryptMsg":"` + encryptParam.String() + `"}`
-		return gvm.HttpPost(gvm.Remote.Url, encryptMsg, header)
+		return gvm.HttpPost(gvm.Url, encryptMsg, header)
 	}
 	account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
 	if account == nil {

@@ -9,7 +9,7 @@ type VMGlobal struct {
 	Runtime     *goja.Runtime
 	ChainInfo   ChainInfo
 	AccountInfo AccountInfo
-	Remote      RemoteInfo
+	Url         string
 	PublicKey   string
 }
 
@@ -28,6 +28,7 @@ type AccountInfo struct {
 	AccountType string
 	Key         string
 	Index       int
+	To          string
 }
 
 type ChainMCallGetter struct {
