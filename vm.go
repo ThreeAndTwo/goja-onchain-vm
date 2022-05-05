@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/btcsuite/btcd/btcec"
-	"github.com/deng00/ethutils"
 	"github.com/dop251/goja"
 	"github.com/dop251/goja_nodejs/require"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -219,37 +218,16 @@ func (gvm *VMGlobal) getAddress() goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
-	if gvm.AccountInfo.AccountType != "" {
-		// remote
-		header := `{"content-type": "application/json"}`
-		params := fmt.Sprintf(`{"chain_id": %d, "account": "%s", "index": %d, "to": "%s"}`,
-			gvm.ChainInfo.ChainId, gvm.AccountInfo.Key, gvm.AccountInfo.Index, gvm.AccountInfo.To)
-		var encryptParam = gvm.EncryptWithPubKey(params)
-		encryptMsg := `{"encryptMsg":"` + encryptParam.String() + `"}`
-
-		data := &RemoteData{}
-		res := gvm.HttpPost(gvm.Url+"/address", encryptMsg, header).String()
-		resArr := strings.Split(res, "||")
-
-		if len(resArr) == 0 {
-			gvm.Runtime.Interrupt(`get remote address error, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
-			return gvm.Runtime.ToValue(`exception`)
-		}
-
-		err := json.Unmarshal([]byte(resArr[0]), data)
-		if err != nil {
-			gvm.Runtime.Interrupt(`get remote address error, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
-			return gvm.Runtime.ToValue(`exception`)
-		}
-		return gvm.Runtime.ToValue(data.Data)
-	}
-	account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
-	if account == nil {
+	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.Url, gvm.PublicKey)
+	if err != nil {
 		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 		return gvm.Runtime.ToValue(`exception`)
 	}
-
-	address := account.Address.String()
+	address, err := _gvmFunc.GetAddress()
+	if err != nil {
+		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		return gvm.Runtime.ToValue(`exception`)
+	}
 	return gvm.Runtime.ToValue(address)
 }
 
@@ -260,18 +238,21 @@ func (gvm *VMGlobal) GetAddressListByIndex(start, end int) goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
+	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.Url, gvm.PublicKey)
+	if err != nil {
+		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
 	var arrAddr []string
 	for k := start; k < end; k++ {
-		gvm.AccountInfo.Index = k
-
-		account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
-		if account == nil {
-			gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		_gvmFunc.SetAccountIndex(k)
+		address, err := _gvmFunc.GetAddress()
+		if err != nil {
+			gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", _gvmFunc.GetAccountIndex()))
 			return gvm.Runtime.ToValue(`exception`)
 		}
-
-		addr := account.Address.String()
-		arrAddr = append(arrAddr, addr)
+		arrAddr = append(arrAddr, address)
 	}
 	addresses := strings.Join(arrAddr, ",")
 	return gvm.Runtime.ToValue(addresses)
@@ -291,19 +272,18 @@ func (gvm *VMGlobal) GetPersonalSign(message string) goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
-	account := NewAccount(gvm.AccountInfo.Key, gvm.AccountInfo.Index).GetAccount()
-	if account == nil {
+	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.Url, gvm.PublicKey)
+	if err != nil {
 		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 		return gvm.Runtime.ToValue(`exception`)
 	}
-
-	signature, err := ethutils.Sign([]byte(message), account.PrivateKey)
+	signature, err := _gvmFunc.Signature([]byte(message))
 	if err != nil {
 		gvm.Runtime.Interrupt(`get sign error, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index) +
 			`error:` + err.Error())
 		return gvm.Runtime.ToValue(`exception`)
 	}
-	return gvm.Runtime.ToValue(hexutil.Encode(signature))
+	return gvm.Runtime.ToValue(signature)
 }
 
 func (gvm *VMGlobal) EncryptWithPubKey(message string) goja.Value {

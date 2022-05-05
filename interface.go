@@ -17,3 +17,10 @@ type IChain interface {
 type IAccount interface {
 	GetAccount() *ethutils.Account
 }
+
+type IFunc interface {
+	GetAccountIndex() int
+	SetAccountIndex(index int)
+	GetAddress() (string, error)
+	Signature(message []byte) (string, error)
+}

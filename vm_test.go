@@ -272,13 +272,77 @@ func TestEVMChain(t *testing.T) {
 			want:   true,
 		},
 		{
-			name: "normal for getAddress func",
+			name: "local for getAddress func",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 100,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       100,
 				},
+			},
+			script: jsGetAddress,
+			want:   true,
+		},
+		{
+			name: "remote for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_SINGLE"),
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetAddress,
+			want:   true,
+		},
+		{
+			name: "remote for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_EV_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetAddress,
+			want:   true,
+		},
+		{
+			name: "remote for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       2,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddress,
 			want:   true,
@@ -312,24 +376,89 @@ func TestEVMChain(t *testing.T) {
 			want:   true,
 		},
 		{
-			name: "normal for getPreAddress func",
+			name: "local for getPreAddress func",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 1,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       1,
 				},
 			},
 			script: jsGetPreAddress,
 			want:   true,
 		},
 		{
+			name: "remote for getPreAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_SINGLE"),
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetPreAddress,
+			want:   false,
+		},
+		{
+			name: "remote for getPreAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_EV_MNEMONIC"),
+					Index:       2,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetPreAddress,
+			want:   false,
+		},
+		{
+			name: "remote for getPreAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetPreAddress,
+			want:   false,
+		},
+		{
 			name: "index out for getAddress func",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 0,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       0,
 				},
 			},
 			script: jsGetPreAddress,
@@ -340,8 +469,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   "",
-					Index: 1,
+					AccountType: LocalTy,
+					Key:         "",
+					Index:       1,
 				},
 			},
 			script: jsGetPreAddress,
@@ -352,20 +482,85 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 0,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       0,
 				},
 			},
 			script: jsGetNextAddress,
 			want:   true,
 		},
 		{
+			name: "remote for getNextAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_SINGLE"),
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetNextAddress,
+			want:   false,
+		},
+		{
+			name: "remote for getNextAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_EV_MNEMONIC"),
+					Index:       2,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetNextAddress,
+			want:   false,
+		},
+		{
+			name: "remote for getNextAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetNextAddress,
+			want:   false,
+		},
+		{
 			name: "index out for getAddress func",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: -2,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       -2,
 				},
 			},
 			script: jsGetNextAddress,
@@ -376,8 +571,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   "",
-					Index: 0,
+					AccountType: LocalTy,
+					Key:         "",
+					Index:       0,
 				},
 			},
 			script: jsGetNextAddress,
@@ -400,8 +596,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 0,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       0,
 				},
 			},
 			script: jsGetAddressByIndex,
@@ -412,8 +609,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 0,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       0,
 				},
 			},
 			script: jsGetAddressListByIndex,
@@ -424,8 +622,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 0,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       0,
 				},
 			},
 			script: jsGetAddressListByIndexError,
@@ -436,8 +635,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 0,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       0,
 				},
 			},
 			script: jsGetCurrentIndex,
@@ -448,8 +648,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 1,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       1,
 				},
 			},
 			script: jsGetCurrentIndexViaString,
@@ -460,8 +661,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 2,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       2,
 				},
 			},
 			script: jsGetCurrentIndexViaMix,
@@ -472,8 +674,9 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				AccountInfo: AccountInfo{
-					Key:   mnemonic,
-					Index: 3,
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       3,
 				},
 			},
 			script: jsGetCurrentIndexViaErr,
@@ -495,6 +698,69 @@ func TestEVMChain(t *testing.T) {
 			},
 			script: jsPersonalSign,
 			want:   true,
+		},
+		{
+			name: "sign message via remote",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_SINGLE"),
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsPersonalSign,
+			want:   false,
+		},
+		{
+			name: "sign message via remote",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_EV_MNEMONIC"),
+					Index:       2,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsPersonalSign,
+			want:   false,
+		},
+		{
+			name: "sign message via remote",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsPersonalSign,
+			want:   false,
 		},
 		{
 			name: "encrypt with pubKey",

@@ -25,7 +25,7 @@ type RemoteInfo struct {
 }
 
 type AccountInfo struct {
-	AccountType string
+	AccountType AccountTy
 	Key         string
 	Index       int
 	To          string
