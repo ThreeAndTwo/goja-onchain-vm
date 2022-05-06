@@ -54,6 +54,11 @@ func (r *Remote) GetAddress() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf(`get remote address error, index:` + fmt.Sprintf("%d", r.accountInfo.Index))
 	}
+
+	if data.Data == "" {
+		return "", fmt.Errorf("address not exist for remote")
+	}
+
 	return data.Data, nil
 }
 
@@ -83,6 +88,11 @@ func (r *Remote) Signature(message []byte) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf(`get remote signature error, index:` + fmt.Sprintf("%d", r.accountInfo.Index))
 	}
+
+	if data.Data == "" {
+		return "", fmt.Errorf("can not signature the message for remote")
+	}
+
 	return data.Data, nil
 }
 
