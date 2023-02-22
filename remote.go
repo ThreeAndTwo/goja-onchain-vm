@@ -108,7 +108,7 @@ func (r *Remote) post(url, params, header string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return resp, nil
+	return resp["data"], nil
 }
 
 func (r *Remote) get(url, params, header string) (string, error) {
@@ -122,7 +122,7 @@ func (r *Remote) get(url, params, header string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return data, err
+	return data["data"], err
 }
 
 func (r *Remote) encryptWithPubKey(message string) (string, error) {

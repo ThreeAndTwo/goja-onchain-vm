@@ -55,9 +55,9 @@ func (gReq *gojaReq) check() bool {
 	return gReq.url == ""
 }
 
-func (gReq *gojaReq) request() (string, error) {
+func (gReq *gojaReq) request() (map[string]string, error) {
 	if gReq.check() {
-		return "", fmt.Errorf("url should be null")
+		return nil, fmt.Errorf("url should be null")
 	}
 
 	switch gReq.reqType {
@@ -70,7 +70,7 @@ func (gReq *gojaReq) request() (string, error) {
 	}
 }
 
-func (gReq *gojaReq) post() (string, error) {
+func (gReq *gojaReq) post() (map[string]string, error) {
 	var reqResp = &req.Resp{}
 	var err error
 	if gReq.isJson {
@@ -81,22 +81,25 @@ func (gReq *gojaReq) post() (string, error) {
 	}
 
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	msHeader, _ := json.Marshal(reqResp.Response().Header)
-	return reqResp.String() + "||" + string(msHeader), err
+	res := make(map[string]string)
+	res["data"] = reqResp.String()
+	bytesHeader, _ := json.Marshal(reqResp.Response().Header)
+	res["header"] = string(bytesHeader)
+	return res, err
 }
 
-func (gReq *gojaReq) get() (string, error) {
+func (gReq *gojaReq) get() (map[string]string, error) {
 	resp, err := req.Get(gReq.url, gReq.header)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	msHeader, err := json.Marshal(resp.Response().Header)
-	if err != nil {
-		return "", err
-	}
-	return resp.String() + "||" + string(msHeader), nil
+	res := make(map[string]string)
+	res["data"] = resp.String()
+	bytesHeader, _ := json.Marshal(resp.Response().Header)
+	res["header"] = string(bytesHeader)
+	return res, nil
 }
