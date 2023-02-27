@@ -384,6 +384,25 @@ func TestEVMChain(t *testing.T) {
 			want:   true,
 		},
 		{
+			name: "index 1 for getAddress func",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 56,
+				},
+				AccountInfo: AccountInfo{
+					AccountType: "Remote",
+					Key:         "bnx",
+					Index:       1,
+					To:          "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
+				},
+				Url:       "https://aaa.bbb.io",
+				PublicKey: os.Getenv("PUBKEY"),
+			},
+			script: jsGetAddress,
+			want:   true,
+		},
+		{
 			name: "index out for getAddress func",
 			gvm: &VMGlobal{
 				Runtime: vm,

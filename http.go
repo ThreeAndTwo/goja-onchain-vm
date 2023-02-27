@@ -80,6 +80,10 @@ func (gReq *gojaReq) post() (map[string]string, error) {
 		reqResp, err = req.Post(gReq.url, gReq.param, gReq.header)
 	}
 
+	if reqResp.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("%d status code != 200, error: %s", reqResp.Response().StatusCode, reqResp.String())
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -95,6 +99,10 @@ func (gReq *gojaReq) get() (map[string]string, error) {
 	resp, err := req.Get(gReq.url, gReq.header)
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.Response().StatusCode != 200 {
+		return nil, fmt.Errorf("%d status code != 200, error: %s", resp.Response().StatusCode, resp.String())
 	}
 
 	res := make(map[string]string)

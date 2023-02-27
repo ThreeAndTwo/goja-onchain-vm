@@ -40,7 +40,7 @@ func (r *Remote) GetAddress() (string, error) {
 
 	encryptMsg := `{"encryptMsg":"` + encryptParam + `"}`
 	data := &RemoteData{}
-	res, err := r.post(r.url+"/address", encryptMsg, header)
+	res, err := r.post(r.url+"/v1/address", encryptMsg, header)
 	if err != nil {
 		return "", err
 	}
