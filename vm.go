@@ -259,7 +259,7 @@ func (gvm *VMGlobal) GetAddressListByIndex(start, end int) goja.Value {
 }
 
 func (gvm *VMGlobal) checkAddress() bool {
-	return gvm.AccountInfo.Key == "" || gvm.AccountInfo.Index < 0
+	return gvm.AccountInfo.Index < 0
 }
 
 func (gvm *VMGlobal) GetCurrentIndex() goja.Value {

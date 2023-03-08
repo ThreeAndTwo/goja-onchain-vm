@@ -262,7 +262,7 @@ func TestEVMChain(t *testing.T) {
 			gvm: &VMGlobal{
 				Runtime: vm,
 				ChainInfo: ChainInfo{
-					ChainId: 1,
+					ChainId: 5,
 					Rpc:     os.Getenv("RPC"),
 					Wss:     os.Getenv("WSS"),
 				},

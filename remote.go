@@ -64,8 +64,8 @@ func (r *Remote) GetAddress() (string, error) {
 
 func (r *Remote) Signature(message []byte) (string, error) {
 	header := `{"content-type": "application/json"}`
-	params := fmt.Sprintf(`{"chain_id": %d, "account": "%s", "index": %d, "to": "%s", "message": "%s"}`,
-		r.chainInfo.ChainId, r.accountInfo.Key, r.accountInfo.Index, r.accountInfo.To, message)
+	params := fmt.Sprintf(`{"chain_id": %d, "index": %d, "to": "%s", "message": "%s"}`,
+		r.chainInfo.ChainId, r.accountInfo.Index, r.accountInfo.To, message)
 
 	encryptParam, err := r.encryptWithPubKey(params)
 	if err != nil {
@@ -74,7 +74,7 @@ func (r *Remote) Signature(message []byte) (string, error) {
 
 	encryptMsg := `{"encryptMsg":"` + encryptParam + `"}`
 	data := &RemoteData{}
-	res, err := r.post(r.url+"/signature", encryptMsg, header)
+	res, err := r.post(r.url+"/v1/signature", encryptMsg, header)
 	if err != nil {
 		return "", err
 	}
