@@ -31,8 +31,8 @@ func (r *Remote) SetAccountIndex(index int) {
 
 func (r *Remote) GetAddress() (string, error) {
 	header := `{"content-type": "application/json"}`
-	params := fmt.Sprintf(`{"chain_id": %d, "account": "%s", "index": %d, "to": "%s"}`,
-		r.chainInfo.ChainId, r.accountInfo.Key, r.accountInfo.Index, r.accountInfo.To)
+	params := fmt.Sprintf(`{"chain_id": %d, "index": %d, "to": "%s"}`,
+		r.chainInfo.ChainId, r.accountInfo.Index, r.accountInfo.To)
 	encryptParam, err := r.encryptWithPubKey(params)
 	if err != nil {
 		return "", err
