@@ -145,6 +145,34 @@ function run() {
 	return encryptWithPubKey(message)
 }
 `
+	jsRandomNumber = `
+function run() {
+	return randomNumber(20, 100);
+}
+`
+
+	jsRandomNumberNav = `
+function run() {
+	return randomNumber(-10, -1);
+}
+`
+
+	jsRandomBytes = `
+function run() {
+	return randomBytes();
+}
+`
+	jsRandomBytes32 = `
+function run() {
+	return randomBytes(32);
+}
+`
+
+	jsRandomBytes20 = `
+function run() {
+	return randomBytes(20);
+}
+`
 )
 
 func TestEVMChain(t *testing.T) {
@@ -1195,6 +1223,111 @@ func TestEVMChain(t *testing.T) {
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
+			want:   false,
+		},
+		{
+			name: "jsRandomNumber",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsRandomNumber,
+			want:   false,
+		},
+		{
+			name: "jsRandomNumberNav",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsRandomNumberNav,
+			want:   false,
+		},
+		{
+			name: "jsRandomBytes",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsRandomBytes,
+			want:   false,
+		},
+		{
+			name: "jsRandomBytes32",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsRandomBytes32,
+			want:   false,
+		},
+		{
+			name: "jsRandomBytes20",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     os.Getenv("RPC"),
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: RemoteTy,
+					Key:         os.Getenv("TEST_MNEMONIC"),
+					Index:       1,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsRandomBytes20,
 			want:   false,
 		},
 		{

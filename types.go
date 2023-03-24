@@ -57,10 +57,16 @@ const (
 	GetAddressByIndex     VmFunc = "getAddressByIndex"
 	GetAddressListByIndex VmFunc = "getAddressListByIndex"
 	GetCurrentIndex       VmFunc = "getCurrentIndex"
-	PersonalSign          VmFunc = "personalSign"
-	HttpGetRequest        VmFunc = "httpGetRequest"
-	HttpPostRequest       VmFunc = "httpPostRequest"
-	EncryptWithPubKey     VmFunc = "encryptWithPubKey"
+
+	RandomBytes  VmFunc = "randomBytes"
+	RandomNumber VmFunc = "randomNumber"
+
+	PersonalSign VmFunc = "personalSign"
+
+	HttpGetRequest  VmFunc = "httpGetRequest"
+	HttpPostRequest VmFunc = "httpPostRequest"
+
+	EncryptWithPubKey VmFunc = "encryptWithPubKey"
 )
 
 type TokenType int64

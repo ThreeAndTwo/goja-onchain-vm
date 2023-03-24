@@ -9,7 +9,9 @@ import (
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/imroc/req"
 	"math/big"
+	"math/rand"
 	"strings"
+	"time"
 )
 
 func (gvm *VMGlobal) Init() error {
@@ -63,6 +65,16 @@ func (gvm *VMGlobal) Init() error {
 	}
 
 	err = vm.Set(string(GetCurrentIndex), gvm.GetCurrentIndex)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(RandomBytes), gvm.GenRandomBytes)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(RandomNumber), gvm.GenRandomNumber)
 	if err != nil {
 		return err
 	}
@@ -264,6 +276,25 @@ func (gvm *VMGlobal) checkAddress() bool {
 
 func (gvm *VMGlobal) GetCurrentIndex() goja.Value {
 	return gvm.Runtime.ToValue(gvm.AccountInfo.Index)
+}
+
+func (gvm *VMGlobal) GenRandomBytes(len int) goja.Value {
+	if len == 0 {
+		len = 32
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	randomBytes := make([]byte, len)
+	if _, err := rand.Read(randomBytes); err != nil {
+		gvm.Runtime.Interrupt(`generate random bytes error:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
+		return gvm.Runtime.ToValue(`exception`)
+	}
+	return gvm.Runtime.ToValue(hexutil.Encode(randomBytes))
+}
+
+func (gvm *VMGlobal) GenRandomNumber(min, max int) int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(max-min+1) + min
 }
 
 func (gvm *VMGlobal) GetPersonalSign(message string) goja.Value {
