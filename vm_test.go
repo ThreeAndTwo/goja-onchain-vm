@@ -173,6 +173,38 @@ function run() {
 	return randomBytes(20);
 }
 `
+	jsGetNonceOffset = `
+function run(){
+	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
+	return numArr[getNonceOffset()];
+}
+`
+	jsGetPendingNonceOffset = `
+function run(){
+	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
+	return numArr[getPendingNonceOffset()];
+}
+`
+
+	jsGetNonceOffset1 = `
+function run(){
+	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
+	return numArr[getNonceOffset()];
+}
+`
+
+	jsGetNonceOffsetOutOfIndex = `
+function run(){
+	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
+	return numArr[getNonceOffset()];
+}
+`
+	jsGetNonceOffsetOutOfIndex1 = `
+function run(){
+	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
+	return numArr[getNonceOffset()];
+}
+`
 )
 
 func TestEVMChain(t *testing.T) {
@@ -1328,6 +1360,116 @@ func TestEVMChain(t *testing.T) {
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsRandomBytes20,
+			want:   false,
+		},
+		{
+			name: "jsGetNonceOffset",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -37,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetNonceOffset,
+			want:   false,
+		},
+		{
+			name: "jsGetNonceOffset",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -37,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetPendingNonceOffset,
+			want:   false,
+		},
+		{
+			name: "jsGetNonceOffset1",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -29,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetNonceOffset1,
+			want:   false,
+		},
+		{
+			name: "jsGetNonceOffsetOutOfIndex",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -40,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetNonceOffsetOutOfIndex,
+			want:   false,
+		},
+		{
+			name: "jsGetNonceOffsetOutOfIndex1",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsGetNonceOffsetOutOfIndex1,
 			want:   false,
 		},
 		{

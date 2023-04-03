@@ -28,6 +28,7 @@ type AccountInfo struct {
 	AccountType AccountTy
 	Key         string
 	Index       int
+	NonceOffset int
 	To          string
 }
 
@@ -57,6 +58,8 @@ const (
 	GetAddressByIndex     VmFunc = "getAddressByIndex"
 	GetAddressListByIndex VmFunc = "getAddressListByIndex"
 	GetCurrentIndex       VmFunc = "getCurrentIndex"
+	GetNonceOffset        VmFunc = "getNonceOffset"
+	GetPendingNonceOffset VmFunc = "getPendingNonceOffset"
 
 	RandomBytes  VmFunc = "randomBytes"
 	RandomNumber VmFunc = "randomNumber"

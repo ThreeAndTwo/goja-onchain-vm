@@ -63,6 +63,14 @@ func (E *EVMChain) GetTokenBalance(tokenType TokenType, contractAddress, account
 	return balance, err
 }
 
+func (E *EVMChain) GetNonce(address string, isPending bool) (uint64, error) {
+	_address := common.HexToAddress(address)
+	if !isPending {
+		return E.chainClient.NonceAt(context.TODO(), _address, nil)
+	}
+	return E.chainClient.PendingNonceAt(context.TODO(), _address)
+}
+
 func (E *EVMChain) Call(to, data string) (string, error) {
 	if !isValidateAddress(to) {
 		return "", fmt.Errorf("address is invalidation")

@@ -10,6 +10,7 @@ type IChain interface {
 	GetProvider() (*ethclient.Client, error)
 
 	GetBalance(account string) (*big.Int, error)
+	GetNonce(address string, isPending bool) (uint64, error)
 	GetTokenBalance(tokenType TokenType, contractAddress, account string, tokenId *big.Int) (*big.Int, error)
 	Call(to, data string) (string, error)
 }
