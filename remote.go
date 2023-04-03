@@ -9,6 +9,13 @@ import (
 	"strings"
 )
 
+type remotePath string
+
+const (
+	RemoteAddress     remotePath = "/v1/address"
+	RemoteSignMessage remotePath = "/v1/sign/message"
+)
+
 type Remote struct {
 	runtime     *goja.Runtime
 	chainInfo   ChainInfo
@@ -40,7 +47,7 @@ func (r *Remote) GetAddress() (string, error) {
 
 	encryptMsg := `{"encryptMsg":"` + encryptParam + `"}`
 	data := &RemoteData{}
-	res, err := r.post(r.url+"/v1/address", encryptMsg, header)
+	res, err := r.post(r.url+string(RemoteAddress), encryptMsg, header)
 	if err != nil {
 		return "", err
 	}
@@ -74,7 +81,7 @@ func (r *Remote) Signature(message []byte) (string, error) {
 
 	encryptMsg := `{"encryptMsg":"` + encryptParam + `"}`
 	data := &RemoteData{}
-	res, err := r.post(r.url+"/v1/signature", encryptMsg, header)
+	res, err := r.post(r.url+string(RemoteSignMessage), encryptMsg, header)
 	if err != nil {
 		return "", err
 	}

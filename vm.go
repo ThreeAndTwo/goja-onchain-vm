@@ -69,6 +69,16 @@ func (gvm *VMGlobal) Init() error {
 		return err
 	}
 
+	err = vm.Set(string(GetNonceOffset), gvm.GetNonceOffset)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(GetPendingNonceOffset), gvm.GetPendingNonceOffset)
+	if err != nil {
+		return err
+	}
+
 	err = vm.Set(string(RandomBytes), gvm.GenRandomBytes)
 	if err != nil {
 		return err
@@ -276,6 +286,35 @@ func (gvm *VMGlobal) checkAddress() bool {
 
 func (gvm *VMGlobal) GetCurrentIndex() goja.Value {
 	return gvm.Runtime.ToValue(gvm.AccountInfo.Index)
+}
+
+func (gvm *VMGlobal) GetNonceOffset() goja.Value {
+	return gvm.getNonce(false)
+}
+
+func (gvm *VMGlobal) GetPendingNonceOffset() goja.Value {
+	return gvm.getNonce(true)
+}
+
+func (gvm *VMGlobal) getNonce(isPending bool) goja.Value {
+	chain, err := ChainGetter(&gvm.ChainInfo)
+	if err != nil {
+		gvm.Runtime.Interrupt(`new chain error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	_address := gvm.getAddress().String()
+	if _address == "exception" {
+		gvm.Runtime.Interrupt(`failed get address via getPendingNonceOffset error:` + _address)
+		return gvm.Runtime.ToValue(`exception`)
+	}
+
+	nonce, err := chain.GetNonce(_address, isPending)
+	if err != nil {
+		gvm.Runtime.Interrupt(`failed get Nonce via getNonceOffset error:` + err.Error())
+		return gvm.Runtime.ToValue(`exception`)
+	}
+	return gvm.Runtime.ToValue(fmt.Sprintf("%d", nonce+uint64(gvm.AccountInfo.NonceOffset)))
 }
 
 func (gvm *VMGlobal) GenRandomBytes(len int) goja.Value {
