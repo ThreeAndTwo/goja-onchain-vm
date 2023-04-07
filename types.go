@@ -59,7 +59,8 @@ const (
 	GetAddressListByIndex VmFunc = "getAddressListByIndex"
 	GetCurrentIndex       VmFunc = "getCurrentIndex"
 	GetNonceOffset        VmFunc = "getNonceOffset"
-	GetPendingNonceOffset VmFunc = "getPendingNonceOffset"
+	GetNonce              VmFunc = "getNonce"
+	GetPendingNonce       VmFunc = "getPendingNonce"
 
 	RandomBytes  VmFunc = "randomBytes"
 	RandomNumber VmFunc = "randomNumber"

@@ -179,10 +179,10 @@ function run(){
 	return numArr[getNonceOffset()];
 }
 `
-	jsGetPendingNonceOffset = `
+	jsGetNonce = `
 function run(){
 	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
-	return numArr[getPendingNonceOffset()];
+	return numArr[getNonce()];
 }
 `
 
@@ -1374,7 +1374,7 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -37,
+					NonceOffset: 1,
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
@@ -1385,7 +1385,7 @@ func TestEVMChain(t *testing.T) {
 			want:   false,
 		},
 		{
-			name: "jsGetNonceOffset",
+			name: "jsGetNonce",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				ChainInfo: ChainInfo{
@@ -1396,14 +1396,14 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -37,
+					NonceOffset: 0,
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
-			script: jsGetPendingNonceOffset,
+			script: jsGetNonce,
 			want:   false,
 		},
 		{

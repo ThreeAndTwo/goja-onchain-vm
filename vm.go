@@ -74,7 +74,12 @@ func (gvm *VMGlobal) Init() error {
 		return err
 	}
 
-	err = vm.Set(string(GetPendingNonceOffset), gvm.GetPendingNonceOffset)
+	err = vm.Set(string(GetNonce), gvm.GetNonce)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(GetPendingNonce), gvm.GetPendingNonce)
 	if err != nil {
 		return err
 	}
@@ -289,10 +294,14 @@ func (gvm *VMGlobal) GetCurrentIndex() goja.Value {
 }
 
 func (gvm *VMGlobal) GetNonceOffset() goja.Value {
+	return gvm.Runtime.ToValue(fmt.Sprintf("%d", gvm.AccountInfo.NonceOffset))
+}
+
+func (gvm *VMGlobal) GetNonce() goja.Value {
 	return gvm.getNonce(false)
 }
 
-func (gvm *VMGlobal) GetPendingNonceOffset() goja.Value {
+func (gvm *VMGlobal) GetPendingNonce() goja.Value {
 	return gvm.getNonce(true)
 }
 
@@ -314,7 +323,7 @@ func (gvm *VMGlobal) getNonce(isPending bool) goja.Value {
 		gvm.Runtime.Interrupt(`failed get Nonce via getNonceOffset error:` + err.Error())
 		return gvm.Runtime.ToValue(`exception`)
 	}
-	return gvm.Runtime.ToValue(fmt.Sprintf("%d", nonce+uint64(gvm.AccountInfo.NonceOffset)))
+	return gvm.Runtime.ToValue(fmt.Sprintf("%d", nonce))
 }
 
 func (gvm *VMGlobal) GenRandomBytes(len int) goja.Value {
