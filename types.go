@@ -7,6 +7,7 @@ import (
 
 type VMGlobal struct {
 	Runtime     *goja.Runtime
+	DBConfig    GojaDB
 	ChainInfo   ChainInfo
 	AccountInfo AccountInfo
 	Url         string

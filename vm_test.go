@@ -1,9 +1,13 @@
 package goja_onchain_vm
 
 import (
+	"github.com/deng00/go-base/db/mongo"
 	"github.com/dop251/goja"
 	_ "github.com/dop251/goja_nodejs/console"
 	_ "github.com/dop251/goja_nodejs/require"
+	"reflect"
+
+	mgo "go.mongodb.org/mongo-driver/mongo"
 	"os"
 	"testing"
 	"time"
@@ -205,7 +209,57 @@ function run(){
 	return numArr[getNonceOffset()];
 }
 `
+
+	jsDBGetViaCache = `
+function run() {
+	const value = db.get("key1");
+	return value;
+}
+`
+
+	jdDBGetViaDB = `
+function run() {
+	db.set("key14", "value14");
+	return db.get("key14");
+}
+`
+
+	jsDBGetErr = `
+function run() {
+	const value = db.get("");
+	return value;
+}
+`
+
+	jsDBSet = `
+function run() {
+	db.set("key4", "value44");
+	return db.get("key4");
+}
+`
+	jsDBSetErr = `
+function run() {
+	return db.set("key1", 123);
+}
+`
 )
+
+var kvMap map[string]string
+var db *mgo.Database
+
+func init() {
+	kvMap = make(map[string]string)
+	kvMap["key1"] = "value1"
+
+	mongoConfig := &mongo.Config{
+		URI:      "",
+		Username: "",
+		Password: "",
+		Database: "",
+	}
+	_mongoClient, _ := mongo.New(mongoConfig)
+	db = _mongoClient.Client.Database(mongoConfig.Database)
+}
 
 func TestEVMChain(t *testing.T) {
 	tests := []struct {
@@ -1473,6 +1527,284 @@ func TestEVMChain(t *testing.T) {
 			want:   false,
 		},
 		{
+			name: "error:db key duplicate",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client:     db,
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBSet,
+			want:   false,
+		},
+		{
+			name: "error: db collection is null",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client: db,
+					//Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBSet,
+			want:   false,
+		},
+		{
+			name: "normal: jsDBSet",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client:     db,
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBSet,
+			want:   false,
+		},
+		{
+			name: "jsDBSetErr: client is null",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBSetErr,
+			want:   false,
+		},
+		{
+			name: "jsDBGetViaCache",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client:     db,
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBGetViaCache,
+			want:   false,
+		},
+		{
+			name: "err:jsDBGetViaCache",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client:     db,
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBGetErr,
+			want:   false,
+		},
+		{
+			name: "jdDBGetViaDB",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client:     db,
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jdDBGetViaDB,
+			want:   false,
+		},
+		{
+			name: "jsDBSetErr",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client:     db,
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: kvMap,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBSetErr,
+			want:   false,
+		},
+		{
+			name: "kvMap is null",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				DBConfig: GojaDB{
+					Client:     db,
+					Collection: "storage",
+					Project: project{
+						Id:   "623d984e9e59cd594c3aac76",
+						Name: "test",
+					},
+					KVMap: nil,
+				},
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					NonceOffset: -25,
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsDBGetViaCache,
+			want:   false,
+		},
+		{
 			name: "encrypt with pubKey",
 			gvm: &VMGlobal{
 				Runtime: vm,
@@ -1501,12 +1833,19 @@ func TestEVMChain(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			startTime := time.Now().UnixMilli()
+			_db := tt.gvm.DBConfig
+			vm.Set("db", map[string]interface{}{
+				"set": _db.Set,
+				"get": _db.Get,
+			})
+
 			err := tt.gvm.Init()
 			t.Logf("duration time %d", time.Now().UnixMilli()-startTime)
 			if err != nil {
 				t.Logf("Init gvm error %s", err)
 				return
 			}
+
 			time.AfterFunc(100*time.Second, func() {
 				vm.Interrupt("halt")
 			})
@@ -1526,7 +1865,7 @@ func TestEVMChain(t *testing.T) {
 				}
 				return
 			}
-			t.Log("value: ", value.String())
+			t.Logf("value: %s, value ty: %s", value.String(), reflect.TypeOf(value).String())
 		})
 	}
 }
