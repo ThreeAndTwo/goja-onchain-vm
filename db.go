@@ -13,11 +13,11 @@ import (
 type GojaDB struct {
 	Client     *mongo.Database
 	Collection string
-	Project    project
+	Project    Project
 	KVMap      map[string]string
 }
 
-type project struct {
+type Project struct {
 	Id   string
 	Name string
 }

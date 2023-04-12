@@ -1533,7 +1533,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1564,7 +1564,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client: db,
 					//Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1595,7 +1595,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1625,7 +1625,7 @@ func TestEVMChain(t *testing.T) {
 				Runtime: vm,
 				DBConfig: GojaDB{
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1656,7 +1656,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1687,7 +1687,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1718,7 +1718,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1749,7 +1749,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
@@ -1780,7 +1780,7 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
-					Project: project{
+					Project: Project{
 						Id:   "623d984e9e59cd594c3aac76",
 						Name: "test",
 					},
