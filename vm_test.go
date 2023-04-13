@@ -233,8 +233,8 @@ function run() {
 
 	jsDBSet = `
 function run() {
-	db.set("key4", "value44");
-	return db.get("key4");
+	db.set("key15", "value15");
+	return db.get("key15");
 }
 `
 	jsDBSetErr = `
@@ -1527,7 +1527,7 @@ func TestEVMChain(t *testing.T) {
 			want:   false,
 		},
 		{
-			name: "error:db key duplicate",
+			name: "normal: update db key",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				DBConfig: GojaDB{

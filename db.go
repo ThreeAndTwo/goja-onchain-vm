@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
 )
 
@@ -97,17 +98,24 @@ func (gdb *GojaDB) Set(key, value string) error {
 		return errValueIsNull
 	}
 
-	kvData := storageList{
-		ID:          primitive.NewObjectID(),
-		ProjectId:   gdb.Project.Id,
-		ProjectName: gdb.Project.Name,
-		Key:         key,
-		Value:       value,
-		CreatedAt:   time.Now().Format(timeLayout),
-		UpdatedAt:   time.Now().Format(timeLayout),
-		DeletedAt:   time.Now().Format(timeLayout),
+	filter := bson.M{"key": key}
+	update := bson.M{
+		"$set": bson.M{
+			"project_id":   gdb.Project.Id,
+			"project_name": gdb.Project.Name,
+			"value":        value,
+			"created_at":   time.Now().Format(timeLayout),
+			"updated_at":   time.Now().Format(timeLayout),
+		},
 	}
-	_, err := gdb.Client.Collection(gdb.Collection).InsertOne(context.TODO(), kvData)
+
+	_, err := gdb.Client.Collection(gdb.Collection).UpdateOne(
+		context.TODO(),
+		filter,
+		update,
+		options.Update().SetUpsert(true),
+	)
+
 	if err != nil {
 		return err
 	}
