@@ -130,6 +130,30 @@ function run() {
 	return tokenList[getCurrentIndex()]
 }
 `
+	jsGetCurrentAccountIndex = `
+function run() {
+	var tokenList = [100,200,300,400]
+	return tokenList[getCurrentAccountIndex()]
+}
+`
+	jsGetCurrentAccountIndexViaString = `
+function run() {
+	var tokenList = ["100","200","300","400"]
+	return tokenList[getCurrentAccountIndex()]
+}
+`
+	jsGetCurrentAccountIndexViaMix = `
+function run() {
+	var tokenList = [1, "200", 30, "4"]
+	return tokenList[getCurrentAccountIndex()]
+}
+`
+	jsGetCurrentAccountIndexViaErr = `
+function run() {
+	var tokenList = [100,"200","30,"40"]
+	return tokenList[getCurrentAccountIndex()]
+}
+`
 	jsPersonalSign = `
 function run() {
 	var message = "Welcome to TRLab!\nWallet address:\n0x00\nNonce\n653888"
@@ -177,36 +201,23 @@ function run() {
 	return randomBytes(20);
 }
 `
-	jsGetNonceOffset = `
+	jsGetCurrentSetOffset = `
 function run(){
 	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
-	return numArr[getNonceOffset()];
+	return numArr[getCurrentSetOffset()];
 }
 `
-	jsGetNonce = `
+	jsGetCurrentTransactionOffset = `
 function run(){
 	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
-	return numArr[getNonce()];
+	return numArr[getCurrentTransactionOffset()];
 }
 `
-
-	jsGetNonceOffset1 = `
+	jsMixOffset = `
 function run(){
 	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
-	return numArr[getNonceOffset()];
-}
-`
-
-	jsGetNonceOffsetOutOfIndex = `
-function run(){
-	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
-	return numArr[getNonceOffset()];
-}
-`
-	jsGetNonceOffsetOutOfIndex1 = `
-function run(){
-	const numArr = ["1", "2", "3", "4","5", "6", "7", "8", "9", "10"];
-	return numArr[getNonceOffset()];
+	const mixIndex = getCurrentAccountIndex() + getCurrentSetOffset() + getCurrentTransactionOffset()
+	return numArr[mixIndex];
 }
 `
 
@@ -1087,6 +1098,19 @@ func TestEVMChain(t *testing.T) {
 			want:   true,
 		},
 		{
+			name: "get current account index",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       0,
+				},
+			},
+			script: jsGetCurrentAccountIndex,
+			want:   true,
+		},
+		{
 			name: "get current index via string",
 			gvm: &VMGlobal{
 				Runtime: vm,
@@ -1097,6 +1121,19 @@ func TestEVMChain(t *testing.T) {
 				},
 			},
 			script: jsGetCurrentIndexViaString,
+			want:   true,
+		},
+		{
+			name: "get current account index via string",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       1,
+				},
+			},
+			script: jsGetCurrentAccountIndexViaString,
 			want:   true,
 		},
 		{
@@ -1113,6 +1150,19 @@ func TestEVMChain(t *testing.T) {
 			want:   true,
 		},
 		{
+			name: "get current index via mix",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       2,
+				},
+			},
+			script: jsGetCurrentAccountIndexViaMix,
+			want:   true,
+		},
+		{
 			name: "get current index via error",
 			gvm: &VMGlobal{
 				Runtime: vm,
@@ -1123,6 +1173,19 @@ func TestEVMChain(t *testing.T) {
 				},
 			},
 			script: jsGetCurrentIndexViaErr,
+			want:   true,
+		},
+		{
+			name: "get current account index via error",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         mnemonic,
+					Index:       3,
+				},
+			},
+			script: jsGetCurrentAccountIndexViaErr,
 			want:   true,
 		},
 		{
@@ -1417,7 +1480,7 @@ func TestEVMChain(t *testing.T) {
 			want:   false,
 		},
 		{
-			name: "jsGetNonceOffset",
+			name: "jsGetCurrentSetOffset",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				ChainInfo: ChainInfo{
@@ -1428,18 +1491,21 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: 1,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
-			script: jsGetNonceOffset,
+			script: jsGetCurrentSetOffset,
 			want:   false,
 		},
 		{
-			name: "jsGetNonce",
+			name: "err: out of index for jsGetCurrentSetOffset",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				ChainInfo: ChainInfo{
@@ -1450,18 +1516,21 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: 0,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         -1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
-			script: jsGetNonce,
+			script: jsGetCurrentSetOffset,
 			want:   false,
 		},
 		{
-			name: "jsGetNonceOffset1",
+			name: "jsGetCurrentTransactionOffset",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				ChainInfo: ChainInfo{
@@ -1472,18 +1541,21 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -29,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
-			script: jsGetNonceOffset1,
+			script: jsGetCurrentTransactionOffset,
 			want:   false,
 		},
 		{
-			name: "jsGetNonceOffsetOutOfIndex",
+			name: "error: out of index for jsGetCurrentTransactionOffset",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				ChainInfo: ChainInfo{
@@ -1494,18 +1566,21 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -40,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 11,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
-			script: jsGetNonceOffsetOutOfIndex,
+			script: jsGetCurrentTransactionOffset,
 			want:   false,
 		},
 		{
-			name: "jsGetNonceOffsetOutOfIndex1",
+			name: "error: out of index for jsGetCurrentTransactionOffset1",
 			gvm: &VMGlobal{
 				Runtime: vm,
 				ChainInfo: ChainInfo{
@@ -1516,14 +1591,67 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: -1,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
-			script: jsGetNonceOffsetOutOfIndex1,
+			script: jsGetCurrentTransactionOffset,
+			want:   false,
+		},
+		{
+			name: "jsMixOffset",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsMixOffset,
+			want:   false,
+		},
+		{
+			name: "error: out of index for jsMixOffset",
+			gvm: &VMGlobal{
+				Runtime: vm,
+				ChainInfo: ChainInfo{
+					ChainId: 1,
+					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
+					Wss:     os.Getenv("WSS"),
+				},
+				AccountInfo: AccountInfo{
+					AccountType: LocalTy,
+					Key:         os.Getenv("TEST_PRIKEY"),
+					Index:       0,
+					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         5,
+					TransactionOffset: 6,
+				},
+				Url:       os.Getenv("URL"),
+				PublicKey: os.Getenv("PUBLICKEY"),
+			},
+			script: jsMixOffset,
 			want:   false,
 		},
 		{
@@ -1547,9 +1675,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1578,9 +1709,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1609,9 +1743,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1639,9 +1776,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1670,9 +1810,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1701,9 +1844,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1732,9 +1878,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1763,9 +1912,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),
@@ -1794,9 +1946,12 @@ func TestEVMChain(t *testing.T) {
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
 					Key:         os.Getenv("TEST_PRIKEY"),
-					NonceOffset: -25,
 					Index:       0,
 					To:          os.Getenv("TO"),
+				},
+				TxSetInfo: SetInfo{
+					SetOffset:         1,
+					TransactionOffset: 2,
 				},
 				Url:       os.Getenv("URL"),
 				PublicKey: os.Getenv("PUBLICKEY"),

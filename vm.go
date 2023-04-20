@@ -69,7 +69,17 @@ func (gvm *VMGlobal) Init() error {
 		return err
 	}
 
-	err = vm.Set(string(GetNonceOffset), gvm.GetNonceOffset)
+	err = vm.Set(string(GetCurrentAccountIndex), gvm.GetCurrentAccountIndex)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(GetCurrentSetOffset), gvm.GetCurrentSetOffset)
+	if err != nil {
+		return err
+	}
+
+	err = vm.Set(string(GetCurrentTransactionOffset), gvm.GetCurrentTransactionOffset)
 	if err != nil {
 		return err
 	}
@@ -289,12 +299,21 @@ func (gvm *VMGlobal) checkAddress() bool {
 	return gvm.AccountInfo.Index < 0
 }
 
+// Deprecated: use GetCurrentAccountIndex instead.
 func (gvm *VMGlobal) GetCurrentIndex() goja.Value {
 	return gvm.Runtime.ToValue(gvm.AccountInfo.Index)
 }
 
-func (gvm *VMGlobal) GetNonceOffset() goja.Value {
-	return gvm.Runtime.ToValue(fmt.Sprintf("%d", gvm.AccountInfo.NonceOffset))
+func (gvm *VMGlobal) GetCurrentAccountIndex() goja.Value {
+	return gvm.Runtime.ToValue(gvm.AccountInfo.Index)
+}
+
+func (gvm *VMGlobal) GetCurrentSetOffset() goja.Value {
+	return gvm.Runtime.ToValue(fmt.Sprintf("%d", gvm.TxSetInfo.SetOffset))
+}
+
+func (gvm *VMGlobal) GetCurrentTransactionOffset() goja.Value {
+	return gvm.Runtime.ToValue(fmt.Sprintf("%d", gvm.TxSetInfo.TransactionOffset))
 }
 
 func (gvm *VMGlobal) GetNonce() goja.Value {

@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"time"
@@ -21,17 +20,6 @@ type GojaDB struct {
 type Project struct {
 	Id   string
 	Name string
-}
-
-type storageList struct {
-	ID          primitive.ObjectID `json:"_id"          bson:"_id"`
-	ProjectId   string             `json:"project_id"   bson:"project_id"`
-	ProjectName string             `json:"project_name" bson:"project_name"`
-	Key         string             `json:"key"          bson:"key"`
-	Value       string             `json:"value"        bson:"value"`
-	CreatedAt   string             `json:"created_at"   bson:"created_at"`
-	UpdatedAt   string             `json:"updated_at"   bson:"updated_at"`
-	DeletedAt   string             `json:"-"            bson:"deleted_at"`
 }
 
 const timeLayout = "2006-01-02 15:04:05"

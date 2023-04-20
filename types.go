@@ -10,6 +10,7 @@ type VMGlobal struct {
 	DBConfig    GojaDB
 	ChainInfo   ChainInfo
 	AccountInfo AccountInfo
+	TxSetInfo   SetInfo
 	Url         string
 	PublicKey   string
 }
@@ -29,8 +30,12 @@ type AccountInfo struct {
 	AccountType AccountTy
 	Key         string
 	Index       int
-	NonceOffset int
 	To          string
+}
+
+type SetInfo struct {
+	SetOffset         int
+	TransactionOffset int
 }
 
 type ChainMCallGetter struct {
@@ -58,10 +63,15 @@ const (
 	GetNextAddress        VmFunc = "getNextAddress"
 	GetAddressByIndex     VmFunc = "getAddressByIndex"
 	GetAddressListByIndex VmFunc = "getAddressListByIndex"
-	GetCurrentIndex       VmFunc = "getCurrentIndex"
-	GetNonceOffset        VmFunc = "getNonceOffset"
-	GetNonce              VmFunc = "getNonce"
-	GetPendingNonce       VmFunc = "getPendingNonce"
+
+	// Deprecated: use GetCurrentAccountIndex instead.
+	GetCurrentIndex        VmFunc = "getCurrentIndex"
+	GetCurrentAccountIndex VmFunc = "getCurrentAccountIndex"
+
+	GetCurrentSetOffset         VmFunc = "getCurrentSetOffset"
+	GetCurrentTransactionOffset VmFunc = "getCurrentTransactionOffset"
+	GetNonce                    VmFunc = "getNonce"
+	GetPendingNonce             VmFunc = "getPendingNonce"
 
 	RandomBytes  VmFunc = "randomBytes"
 	RandomNumber VmFunc = "randomNumber"
