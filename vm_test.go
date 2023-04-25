@@ -230,8 +230,8 @@ function run() {
 
 	jdDBGetViaDB = `
 function run() {
-	db.set("key14", "value14");
-	return db.get("key14");
+	db.set("key15", "value15");
+	return db.get("key15");
 }
 `
 
@@ -1864,8 +1864,9 @@ func TestEVMChain(t *testing.T) {
 				DBConfig: GojaDB{
 					Client:     db,
 					Collection: "storage",
+					TeamSlug:   "test_slug1",
 					Project: Project{
-						Id:   "623d984e9e59cd594c3aac76",
+						Id:   "623d984e9e59cd594c3aac77",
 						Name: "test",
 					},
 					KVMap: kvMap,

@@ -13,6 +13,7 @@ import (
 type GojaDB struct {
 	Client     *mongo.Database
 	Collection string
+	TeamSlug   string
 	Project    Project
 	KVMap      map[string]string
 }
@@ -86,12 +87,13 @@ func (gdb *GojaDB) Set(key, value string) error {
 		return errValueIsNull
 	}
 
-	filter := bson.M{"key": key}
+	filter := bson.M{"team_slug": gdb.TeamSlug, "project_id": gdb.Project.Id, "key": key}
 	update := bson.M{
 		"$set": bson.M{
 			"project_id":   gdb.Project.Id,
 			"project_name": gdb.Project.Name,
 			"value":        value,
+			"team_slug":    gdb.TeamSlug,
 			"created_at":   time.Now().Format(timeLayout),
 			"updated_at":   time.Now().Format(timeLayout),
 		},
