@@ -11,14 +11,14 @@ type VMGlobal struct {
 	ChainInfo   ChainInfo
 	AccountInfo AccountInfo
 	TxSetInfo   SetInfo
-	Url         string
+	RemoteUrl   string
 	PublicKey   string
 }
 
 type ChainInfo struct {
-	ChainId int64
-	Rpc     string
-	Wss     string
+	ChainId   int64
+	Rpc       string
+	Multicall string
 }
 
 type RemoteInfo struct {

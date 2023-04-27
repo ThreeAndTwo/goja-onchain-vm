@@ -255,7 +255,7 @@ func (gvm *VMGlobal) getAddress() goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
-	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.Url, gvm.PublicKey)
+	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.RemoteUrl, gvm.PublicKey)
 	if err != nil {
 		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 		return gvm.Runtime.ToValue(`exception`)
@@ -275,7 +275,7 @@ func (gvm *VMGlobal) GetAddressListByIndex(start, end int) goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
-	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.Url, gvm.PublicKey)
+	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.RemoteUrl, gvm.PublicKey)
 	if err != nil {
 		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 		return gvm.Runtime.ToValue(`exception`)
@@ -370,7 +370,7 @@ func (gvm *VMGlobal) GetPersonalSign(message string) goja.Value {
 		return gvm.Runtime.ToValue(`exception`)
 	}
 
-	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.Url, gvm.PublicKey)
+	_gvmFunc, err := NewFunc(gvm.Runtime, gvm.ChainInfo, gvm.AccountInfo, gvm.RemoteUrl, gvm.PublicKey)
 	if err != nil {
 		gvm.Runtime.Interrupt(`params invalidate for address, index:` + fmt.Sprintf("%d", gvm.AccountInfo.Index))
 		return gvm.Runtime.ToValue(`exception`)

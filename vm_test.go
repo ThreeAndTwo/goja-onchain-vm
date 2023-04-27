@@ -389,7 +389,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 5,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -397,7 +396,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddress,
@@ -410,7 +409,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -418,7 +416,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddress,
@@ -431,7 +429,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -439,7 +436,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddress,
@@ -452,7 +449,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -460,7 +456,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddress,
@@ -473,7 +469,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -481,7 +476,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddress,
@@ -494,7 +489,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -502,7 +496,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       25,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddress,
@@ -521,7 +515,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c",
 				},
-				Url:       "https://aaa.bbb.io",
+				RemoteUrl: "https://aaa.bbb.io",
 				PublicKey: os.Getenv("PUBKEY"),
 			},
 			script: jsGetAddress,
@@ -537,7 +531,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          "0x00",
 				},
-				Url:       "http://127.0.0.1/ping",
+				RemoteUrl: "http://127.0.0.1/ping",
 				PublicKey: os.Getenv("PUBKEY"),
 			},
 			script: jsGetAddress,
@@ -576,7 +570,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -584,7 +577,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetPreAddress,
@@ -597,7 +590,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -605,7 +597,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetPreAddress,
@@ -618,7 +610,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -626,7 +617,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetPreAddress,
@@ -639,7 +630,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -647,7 +637,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       5,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetPreAddress,
@@ -660,7 +650,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -668,7 +657,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetPreAddress,
@@ -681,7 +670,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -689,7 +677,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetPreAddress,
@@ -702,7 +690,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -710,7 +697,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       30,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetPreAddress,
@@ -762,7 +749,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -770,7 +756,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       -1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetNextAddress,
@@ -783,7 +769,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -791,7 +776,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetNextAddress,
@@ -804,7 +789,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -812,7 +796,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetNextAddress,
@@ -825,7 +809,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -833,7 +816,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetNextAddress,
@@ -846,7 +829,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -854,7 +836,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetNextAddress,
@@ -867,7 +849,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -875,7 +856,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       24,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetNextAddress,
@@ -939,7 +920,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -947,7 +927,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddressByIndex,
@@ -960,7 +940,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -968,7 +947,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddressByIndex,
@@ -981,7 +960,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -989,7 +967,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       24,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddressByIndex,
@@ -1015,7 +993,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1023,7 +1000,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddressListByIndex,
@@ -1036,7 +1013,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1044,7 +1020,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddressListByIndex,
@@ -1057,7 +1033,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1065,7 +1040,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       24,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetAddressListByIndex,
@@ -1195,7 +1170,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     "",
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1213,7 +1187,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1221,7 +1194,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1234,7 +1207,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1242,7 +1214,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1255,7 +1227,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1263,7 +1234,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       24,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1276,7 +1247,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1284,7 +1254,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1297,7 +1267,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1305,7 +1274,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1318,7 +1287,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1326,7 +1294,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       0,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1339,7 +1307,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1347,7 +1314,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       2,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1360,7 +1327,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1368,7 +1334,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsPersonalSign,
@@ -1381,7 +1347,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1389,7 +1354,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsRandomNumber,
@@ -1402,7 +1367,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1410,7 +1374,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsRandomNumberNav,
@@ -1423,7 +1387,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1431,7 +1394,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsRandomBytes,
@@ -1444,7 +1407,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1452,7 +1414,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsRandomBytes32,
@@ -1465,7 +1427,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     os.Getenv("RPC"),
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: RemoteTy,
@@ -1473,7 +1434,7 @@ func TestEVMChain(t *testing.T) {
 					Index:       1,
 					To:          os.Getenv("TO"),
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsRandomBytes20,
@@ -1486,7 +1447,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1498,7 +1458,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetCurrentSetOffset,
@@ -1511,7 +1471,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1523,7 +1482,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         -1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetCurrentSetOffset,
@@ -1536,7 +1495,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1548,7 +1506,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetCurrentTransactionOffset,
@@ -1561,7 +1519,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1573,7 +1530,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 11,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetCurrentTransactionOffset,
@@ -1586,7 +1543,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1598,7 +1554,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: -1,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsGetCurrentTransactionOffset,
@@ -1611,7 +1567,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1623,7 +1578,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsMixOffset,
@@ -1636,7 +1591,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1648,7 +1602,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         5,
 					TransactionOffset: 6,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsMixOffset,
@@ -1670,7 +1624,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1682,7 +1635,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBSet,
@@ -1704,7 +1657,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1716,7 +1668,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBSet,
@@ -1738,7 +1690,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1750,7 +1701,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBSet,
@@ -1771,7 +1722,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1783,7 +1733,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBSetErr,
@@ -1805,7 +1755,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1817,7 +1766,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBGetViaCache,
@@ -1839,7 +1788,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1851,7 +1799,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBGetErr,
@@ -1874,7 +1822,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1886,7 +1833,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jdDBGetViaDB,
@@ -1908,7 +1855,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1920,7 +1866,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBSetErr,
@@ -1942,7 +1888,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "https://mainnet.infura.io/v3/74312c6b77ac435fa2559c7e98277be5",
-					Wss:     os.Getenv("WSS"),
 				},
 				AccountInfo: AccountInfo{
 					AccountType: LocalTy,
@@ -1954,7 +1899,7 @@ func TestEVMChain(t *testing.T) {
 					SetOffset:         1,
 					TransactionOffset: 2,
 				},
-				Url:       os.Getenv("URL"),
+				RemoteUrl: os.Getenv("RemoteUrl"),
 				PublicKey: os.Getenv("PUBLICKEY"),
 			},
 			script: jsDBGetViaCache,
@@ -1967,7 +1912,6 @@ func TestEVMChain(t *testing.T) {
 				ChainInfo: ChainInfo{
 					ChainId: 1,
 					Rpc:     "",
-					Wss:     "",
 				},
 				AccountInfo: AccountInfo{},
 				PublicKey:   os.Getenv("PUBKEY"),
