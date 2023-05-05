@@ -309,11 +309,11 @@ func (gvm *VMGlobal) GetCurrentAccountIndex() goja.Value {
 }
 
 func (gvm *VMGlobal) GetCurrentSetOffset() goja.Value {
-	return gvm.Runtime.ToValue(fmt.Sprintf("%d", gvm.TxSetInfo.SetOffset))
+	return gvm.Runtime.ToValue(gvm.TxSetInfo.SetOffset)
 }
 
 func (gvm *VMGlobal) GetCurrentTransactionOffset() goja.Value {
-	return gvm.Runtime.ToValue(fmt.Sprintf("%d", gvm.TxSetInfo.TransactionOffset))
+	return gvm.Runtime.ToValue(gvm.TxSetInfo.TransactionOffset)
 }
 
 func (gvm *VMGlobal) GetNonce() goja.Value {
@@ -342,7 +342,7 @@ func (gvm *VMGlobal) getNonce(isPending bool) goja.Value {
 		gvm.Runtime.Interrupt(`failed get Nonce via getNonceOffset error:` + err.Error())
 		return gvm.Runtime.ToValue(`exception`)
 	}
-	return gvm.Runtime.ToValue(fmt.Sprintf("%d", nonce))
+	return gvm.Runtime.ToValue(nonce)
 }
 
 func (gvm *VMGlobal) GenRandomBytes(len int) goja.Value {
