@@ -3,9 +3,8 @@ package goja_onchain_vm
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/btcsuite/btcd/btcec"
+	goEthutils "github.com/CoinSummer/go-ethutils"
 	"github.com/dop251/goja"
-	"github.com/ethereum/go-ethereum/common/hexutil"
 	"strings"
 )
 
@@ -137,19 +136,14 @@ func (r *Remote) encryptWithPubKey(message string) (string, error) {
 		return "", fmt.Errorf("params invalidate for encryptWithPubKey")
 	}
 
-	signerKey, err := hexutil.Decode("0x" + string(r.publicKey))
+	key, err := goEthutils.EncryptByPubKey("0x"+string(r.publicKey), message)
 	if err != nil {
-		return "", fmt.Errorf(`decode public key error:` + err.Error())
+		return "", err
 	}
 
-	pubKey, err := btcec.ParsePubKey(signerKey, btcec.S256())
+	ed, err := key.Stringify()
 	if err != nil {
-		return "", fmt.Errorf(`parse public key error:` + err.Error())
+		return "", err
 	}
-
-	encryptData, err := btcec.Encrypt(pubKey, []byte(message))
-	if err != nil {
-		return "", fmt.Errorf(`encrypt data error:` + err.Error())
-	}
-	return hexutil.Encode(encryptData), nil
+	return ed, nil
 }

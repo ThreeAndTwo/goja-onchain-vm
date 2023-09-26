@@ -3,6 +3,7 @@ module github.com/ThreeAndTwo/goja-onchain-vm
 go 1.19
 
 require (
+	github.com/CoinSummer/go-ethutils v0.0.4
 	github.com/alethio/web3-multicall-go v0.0.15
 	github.com/btcsuite/btcd v0.22.1
 	github.com/deng00/ethutils v0.1.3
