@@ -37,8 +37,7 @@ func (r *Remote) SetAccountIndex(index int) {
 
 func (r *Remote) GetAddress() (string, error) {
 	header := `{"content-type": "application/json"}`
-	params := fmt.Sprintf(`{"chain_id": %d, "index": %d}`,
-		r.chainInfo.ChainId, r.accountInfo.Index)
+	params := fmt.Sprintf(`{"index": %d}`, r.accountInfo.Index)
 	encryptParam, err := r.encryptWithPubKey(params)
 	if err != nil {
 		return "", err
@@ -136,7 +135,7 @@ func (r *Remote) encryptWithPubKey(message string) (string, error) {
 		return "", fmt.Errorf("params invalidate for encryptWithPubKey")
 	}
 
-	key, err := goEthutils.EncryptByPubKey("0x"+string(r.publicKey), message)
+	key, err := goEthutils.EncryptByPubKey(r.publicKey, message)
 	if err != nil {
 		return "", err
 	}
