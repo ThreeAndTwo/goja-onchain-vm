@@ -30,7 +30,8 @@ type AccountInfo struct {
 	AccountType AccountTy
 	Key         string
 	Index       int
-	To          string
+	Account     string
+	//To          string
 }
 
 type SetInfo struct {

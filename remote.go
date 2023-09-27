@@ -5,7 +5,6 @@ import (
 	"fmt"
 	goEthutils "github.com/CoinSummer/go-ethutils"
 	"github.com/dop251/goja"
-	"strings"
 )
 
 type remotePath string
@@ -37,7 +36,8 @@ func (r *Remote) SetAccountIndex(index int) {
 
 func (r *Remote) GetAddress() (string, error) {
 	header := `{"content-type": "application/json"}`
-	params := fmt.Sprintf(`{"index": %d}`, r.accountInfo.Index)
+	params := fmt.Sprintf(`{"chain_id": %d, "index": %d}`,
+		r.chainInfo.ChainId, r.accountInfo.Index)
 	encryptParam, err := r.encryptWithPubKey(params)
 	if err != nil {
 		return "", err
@@ -49,13 +49,7 @@ func (r *Remote) GetAddress() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	resArr := strings.Split(res, "||")
-
-	if len(resArr) == 0 {
-		return "", fmt.Errorf(`get remote address error, index:` + fmt.Sprintf("%d", r.accountInfo.Index))
-	}
-
-	err = json.Unmarshal([]byte(resArr[0]), data)
+	err = json.Unmarshal([]byte(res), data)
 	if err != nil {
 		return "", fmt.Errorf(`get remote address error, index:` + fmt.Sprintf("%d", r.accountInfo.Index))
 	}
@@ -69,8 +63,8 @@ func (r *Remote) GetAddress() (string, error) {
 
 func (r *Remote) Signature(message []byte) (string, error) {
 	header := `{"content-type": "application/json"}`
-	params := fmt.Sprintf(`{"chain_id": %d, "index": %d, "to": "%s", "message": "%s"}`,
-		r.chainInfo.ChainId, r.accountInfo.Index, r.accountInfo.To, message)
+	params := fmt.Sprintf(`{"chain_id": %d, "account": %s, "message": "%s"}`,
+		r.chainInfo.ChainId, r.accountInfo.Account, message)
 
 	encryptParam, err := r.encryptWithPubKey(params)
 	if err != nil {
@@ -83,13 +77,8 @@ func (r *Remote) Signature(message []byte) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	resArr := strings.Split(res, "||")
 
-	if len(resArr) == 0 {
-		return "", fmt.Errorf(`get remote signature error, index:` + fmt.Sprintf("%d", r.accountInfo.Index))
-	}
-
-	err = json.Unmarshal([]byte(resArr[0]), data)
+	err = json.Unmarshal([]byte(res), data)
 	if err != nil {
 		return "", fmt.Errorf(`get remote signature error, index:` + fmt.Sprintf("%d", r.accountInfo.Index))
 	}
