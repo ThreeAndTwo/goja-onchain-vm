@@ -63,7 +63,7 @@ func (r *Remote) GetAddress() (string, error) {
 
 func (r *Remote) Signature(message []byte) (string, error) {
 	header := `{"content-type": "application/json"}`
-	params := fmt.Sprintf(`{"chain_id": %d, "account": %s, "message": "%s"}`,
+	params := fmt.Sprintf(`{"chain_id": %d, "account": "%s", "message": "%s"}`,
 		r.chainInfo.ChainId, r.accountInfo.Account, message)
 
 	encryptParam, err := r.encryptWithPubKey(params)
